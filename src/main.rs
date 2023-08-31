@@ -1,9 +1,15 @@
+//! The `kcl` lsp server.
+
+#![deny(missing_docs)]
+pub mod server;
+
 use anyhow::{bail, Result};
 use clap::Parser;
 use slog::Drain;
-use tower_lsp::{jsonrpc::Result as RpcResult, lsp_types::*, Client, LanguageServer, LspService, Server as LspServer};
+use tracing_subscriber::{prelude::*, Layer};
 
 lazy_static::lazy_static! {
+/// Initialize the logger.
     // We need a slog::Logger for steno and when we export out the logs from re-exec-ed processes.
     pub static ref LOGGER: slog::Logger = {
         let decorator = slog_term::TermDecorator::new().build();
@@ -26,6 +32,7 @@ pub struct Opts {
     #[clap(short, long)]
     pub json: bool,
 
+    /// The subcommand to run.
     #[clap(subcommand)]
     pub subcmd: SubCommand,
 }
@@ -60,8 +67,10 @@ impl Opts {
     }
 }
 
+/// A subcommand for our cli.
 #[derive(Parser, Debug, Clone)]
 pub enum SubCommand {
+    /// Run the server.
     Server(Server),
 }
 
@@ -73,33 +82,67 @@ pub struct Server {
     pub address: String,
 }
 
-#[derive(Debug)]
-struct Backend {
-    client: Client,
-}
-
-#[tower_lsp::async_trait]
-impl LanguageServer for Backend {
-    async fn initialize(&self, _: InitializeParams) -> RpcResult<InitializeResult> {
-        Ok(InitializeResult::default())
-    }
-
-    async fn initialized(&self, _: InitializedParams) {
-        self.client.log_message(MessageType::INFO, "server initialized!").await;
-    }
-
-    async fn shutdown(&self) -> RpcResult<()> {
-        Ok(())
-    }
-}
-
 #[tokio::main]
 async fn main() -> Result<()> {
-    let stdin = tokio::io::stdin();
-    let stdout = tokio::io::stdout();
+    let opts: Opts = Opts::parse();
 
-    let (service, socket) = LspService::new(|client| Backend { client });
-    LspServer::new(stdin, stdout, socket).serve(service).await;
+    let level_filter = if opts.debug {
+        tracing_subscriber::filter::LevelFilter::DEBUG
+    } else {
+        tracing_subscriber::filter::LevelFilter::INFO
+    };
+
+    // Format fields using the provided closure.
+    // We want to make this very consise otherwise the logs are not able to be read by humans.
+    let format = tracing_subscriber::fmt::format::debug_fn(|writer, field, value| {
+        if format!("{}", field) == "message" {
+            write!(writer, "{}: {:?}", field, value)
+        } else {
+            write!(writer, "{}", field)
+        }
+    })
+    // Separate each field with a comma.
+    // This method is provided by an extension trait in the
+    // `tracing-subscriber` prelude.
+    .delimited(", ");
+
+    let (json, plain) = if opts.json {
+        // Cloud run likes json formatted logs if possible.
+        // See: https://cloud.google.com/run/docs/logging
+        // We could probably format these specifically for cloud run if we wanted,
+        // will save that as a TODO: https://cloud.google.com/run/docs/logging#special-fields
+        (
+            Some(tracing_subscriber::fmt::layer().json().with_filter(level_filter)),
+            None,
+        )
+    } else {
+        (
+            None,
+            Some(
+                tracing_subscriber::fmt::layer()
+                    .pretty()
+                    .fmt_fields(format)
+                    .with_filter(level_filter),
+            ),
+        )
+    };
+
+    // Initialize the Sentry tracing.
+    tracing_subscriber::registry().with(json).with(plain).init();
+
+    if let Err(err) = run_cmd(&opts).await {
+        bail!("running cmd `{:?}` failed: {:?}", &opts.subcmd, err);
+    }
+
+    Ok(())
+}
+
+async fn run_cmd(opts: &Opts) -> Result<()> {
+    match &opts.subcmd {
+        SubCommand::Server(s) => {
+            crate::server::run(s).await?;
+        }
+    }
 
     Ok(())
 }
