@@ -61,7 +61,7 @@
     "test-compile": "tsc -p ./",
     "compile": "cross-env NODE_ENV=production tsc -b",
     "watch": "rm -rf dist && tsc -b -w",
-    "lint": "eslint src --ext ts",
+    "lint": "eslint client --ext ts",
     "pretest": "yarn run compile && yarn run lint",
     "test": "node ./out/test/runTest.js",
     "build": "webpack --config webpack.config.js",
