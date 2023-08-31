@@ -40,7 +40,7 @@ impl LanguageServer for Backend {
                         text_document_registration_options: {
                             TextDocumentRegistrationOptions {
                                 document_selector: Some(vec![DocumentFilter {
-                                    language: Some("nrs".to_string()),
+                                    language: Some("kcl".to_string()),
                                     scheme: Some("file".to_string()),
                                     pattern: None,
                                 }]),
@@ -148,11 +148,11 @@ pub async fn run(opts: &crate::Server) -> Result<()> {
 
     tokio::spawn(async move {
         for sig in signals.forever() {
-            log::info!("received signal: {:?}", sig);
+            /*    log::info!("received signal: {:?}", sig);
             log::info!("triggering cleanup...");
 
             // Exit the process.
-            log::info!("all clean, exiting!");
+            log::info!("all clean, exiting!");*/
             std::process::exit(0);
         }
     });
