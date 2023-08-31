@@ -22,9 +22,6 @@ struct Backend {
 
 impl Backend {
     async fn on_change(&self, params: TextDocumentItem) {
-        self.client
-            .log_message(MessageType::INFO, format!("on_change: {:?}", params))
-            .await;
         // Lets update the tokens.
         let tokens = kcl_lib::tokeniser::lexer(&params.text);
         self.token_map.insert(params.uri.to_string(), tokens.clone());
@@ -192,10 +189,6 @@ impl LanguageServer for Backend {
     }
 
     async fn completion(&self, params: CompletionParams) -> RpcResult<Option<CompletionResponse>> {
-        self.client
-            .log_message(MessageType::INFO, format!("completion: {:?}", params))
-            .await;
-
         let mut completions = vec![
             CompletionItem::new_simple("|>".to_string(), "A pipe operator.".to_string()),
             CompletionItem::new_simple("let".to_string(), "A let binding.".to_string()),
