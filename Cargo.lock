@@ -393,7 +393,6 @@ dependencies = [
  "lock_api",
  "once_cell",
  "parking_lot_core",
- "serde",
 ]
 
 [[package]]
@@ -829,7 +828,6 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
- "dashmap",
  "kcl-lib",
  "lazy_static",
  "log",

@@ -1,9 +1,6 @@
 //! Functions for the `kcl` lsp server.
 
-use std::collections::HashMap;
-
 use anyhow::Result;
-use dashmap::DashMap;
 use log::info;
 use signal_hook::{
     consts::{SIGINT, SIGTERM},
