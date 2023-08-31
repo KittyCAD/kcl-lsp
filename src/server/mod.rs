@@ -1,7 +1,5 @@
 //! Functions for the `kcl` lsp server.
 
-use std::sync::Arc;
-
 use anyhow::Result;
 use signal_hook::{
     consts::{SIGINT, SIGTERM},
@@ -9,14 +7,20 @@ use signal_hook::{
 };
 use tower_lsp::{jsonrpc::Result as RpcResult, lsp_types::*, Client, LanguageServer, LspService, Server as LspServer};
 
-use crate::lang::semantic_tokens::LEGEND_TYPE;
-
 /// The lsp server backend.
 struct Backend {
     /// The client for the backend.
     client: Client,
     /// The stdlib completions for the language.
     stdlib_completions: Vec<CompletionItem>,
+}
+
+impl Backend {
+    async fn on_change(&self, params: TextDocumentItem) {
+        self.client
+            .log_message(MessageType::INFO, format!("on_change: {:?}", params))
+            .await;
+    }
 }
 
 #[tower_lsp::async_trait]
@@ -53,6 +57,26 @@ impl LanguageServer for Backend {
         Ok(())
     }
 
+    async fn did_open(&self, params: DidOpenTextDocumentParams) {
+        self.on_change(TextDocumentItem {
+            uri: params.text_document.uri,
+            text: params.text_document.text,
+            version: params.text_document.version,
+            language_id: params.text_document.language_id,
+        })
+        .await
+    }
+
+    async fn did_change(&self, mut params: DidChangeTextDocumentParams) {
+        self.on_change(TextDocumentItem {
+            uri: params.text_document.uri,
+            text: std::mem::take(&mut params.content_changes[0].text),
+            version: params.text_document.version,
+            language_id: Default::default(),
+        })
+        .await
+    }
+
     async fn hover(&self, params: HoverParams) -> RpcResult<Option<Hover>> {
         self.client
             .log_message(MessageType::INFO, format!("hover: {:?}", params))
@@ -75,58 +99,10 @@ impl LanguageServer for Backend {
             CompletionItem::new_simple("show".to_string(), "Show a model.".to_string()),
         ];
         completions.extend(self.stdlib_completions.clone());
+
+        // TODO: we need to add all the consts and vars to our completions, unless another
+        // default plugin does this.
         Ok(Some(CompletionResponse::Array(completions)))
-    }
-
-    async fn goto_definition(&self, params: GotoDefinitionParams) -> RpcResult<Option<GotoDefinitionResponse>> {
-        self.client
-            .log_message(MessageType::INFO, format!("goto_definition: {:?}", params))
-            .await;
-        todo!();
-        Ok(None)
-    }
-
-    async fn references(&self, params: ReferenceParams) -> RpcResult<Option<Vec<Location>>> {
-        self.client
-            .log_message(MessageType::INFO, format!("references: {:?}", params))
-            .await;
-        todo!();
-        Ok(None)
-    }
-
-    async fn semantic_tokens_full(&self, params: SemanticTokensParams) -> RpcResult<Option<SemanticTokensResult>> {
-        self.client
-            .log_message(MessageType::INFO, format!("semantic_tokens_full: {:?}", params))
-            .await;
-        todo!();
-        Ok(None)
-    }
-
-    async fn semantic_tokens_range(
-        &self,
-        params: SemanticTokensRangeParams,
-    ) -> RpcResult<Option<SemanticTokensRangeResult>> {
-        self.client
-            .log_message(MessageType::INFO, format!("semantic_tokens_range: {:?}", params))
-            .await;
-        todo!();
-        Ok(None)
-    }
-
-    async fn inlay_hint(&self, params: tower_lsp::lsp_types::InlayHintParams) -> RpcResult<Option<Vec<InlayHint>>> {
-        self.client
-            .log_message(MessageType::INFO, format!("inlay_hint: {:?}", params))
-            .await;
-        todo!();
-        Ok(None)
-    }
-
-    async fn rename(&self, params: RenameParams) -> RpcResult<Option<WorkspaceEdit>> {
-        self.client
-            .log_message(MessageType::INFO, format!("rename: {:?}", params))
-            .await;
-        todo!();
-        Ok(None)
     }
 }
 
