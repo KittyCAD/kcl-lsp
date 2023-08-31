@@ -1,8 +1,6 @@
 //! Functions for semantic tokens.
 
-use std::collections::HashMap;
-
-use tower_lsp::{jsonrpc::Result as RpcResult, lsp_types::*, Client, LanguageServer, LspService, Server as LspServer};
+use tower_lsp::lsp_types::*;
 
 /// The type of semantic tokens legend.
 pub const LEGEND_TYPE: &[SemanticTokenType] = &[
