@@ -798,6 +798,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
+ "dashmap",
  "kcl-lib",
  "lazy_static",
  "log",

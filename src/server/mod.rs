@@ -1,6 +1,7 @@
 //! Functions for the `kcl` lsp server.
 
 use anyhow::Result;
+use dashmap::DashMap;
 use signal_hook::{
     consts::{SIGINT, SIGTERM},
     iterator::Signals,
@@ -13,6 +14,10 @@ struct Backend {
     client: Client,
     /// The stdlib completions for the language.
     stdlib_completions: Vec<CompletionItem>,
+    /// Token maps.
+    token_map: DashMap<String, Vec<kcl_lib::tokeniser::Token>>,
+    /// AST maps.
+    ast_map: DashMap<String, kcl_lib::abstract_syntax_tree_types::Program>,
 }
 
 impl Backend {
@@ -20,6 +25,21 @@ impl Backend {
         self.client
             .log_message(MessageType::INFO, format!("on_change: {:?}", params))
             .await;
+        // Lets update the tokens.
+        let tokens = kcl_lib::tokeniser::lexer(&params.text);
+        self.token_map.insert(params.uri.to_string(), tokens.clone());
+        // Lets update the ast.
+        let ast = match kcl_lib::parser::abstract_syntax_tree(&tokens) {
+            Ok(ast) => ast,
+            Err(e) => {
+                // TODO: put an error on the line.
+                self.client
+                    .log_message(MessageType::ERROR, format!("Error parsing: {:?}", e))
+                    .await;
+                return;
+            }
+        };
+        self.ast_map.insert(params.uri.to_string(), ast);
     }
 }
 
@@ -40,6 +60,14 @@ impl LanguageServer for Backend {
                     all_commit_characters: None,
                     ..Default::default()
                 }),
+                text_document_sync: Some(TextDocumentSyncCapability::Kind(TextDocumentSyncKind::FULL)),
+                workspace: Some(WorkspaceServerCapabilities {
+                    workspace_folders: Some(WorkspaceFoldersServerCapabilities {
+                        supported: Some(true),
+                        change_notifications: Some(OneOf::Left(true)),
+                    }),
+                    file_operations: None,
+                }),
                 ..Default::default()
             },
             ..Default::default()
@@ -55,6 +83,24 @@ impl LanguageServer for Backend {
     async fn shutdown(&self) -> RpcResult<()> {
         self.client.log_message(MessageType::INFO, "shutdown".to_string()).await;
         Ok(())
+    }
+
+    async fn did_change_workspace_folders(&self, _: DidChangeWorkspaceFoldersParams) {
+        self.client
+            .log_message(MessageType::INFO, "workspace folders changed!")
+            .await;
+    }
+
+    async fn did_change_configuration(&self, _: DidChangeConfigurationParams) {
+        self.client
+            .log_message(MessageType::INFO, "configuration changed!")
+            .await;
+    }
+
+    async fn did_change_watched_files(&self, _: DidChangeWatchedFilesParams) {
+        self.client
+            .log_message(MessageType::INFO, "watched files have changed!")
+            .await;
     }
 
     async fn did_open(&self, params: DidOpenTextDocumentParams) {
@@ -75,6 +121,14 @@ impl LanguageServer for Backend {
             language_id: Default::default(),
         })
         .await
+    }
+
+    async fn did_save(&self, _: DidSaveTextDocumentParams) {
+        self.client.log_message(MessageType::INFO, "file saved!").await;
+    }
+
+    async fn did_close(&self, _: DidCloseTextDocumentParams) {
+        self.client.log_message(MessageType::INFO, "file closed!").await;
     }
 
     async fn hover(&self, params: HoverParams) -> RpcResult<Option<Hover>> {
@@ -130,6 +184,8 @@ pub async fn run(opts: &crate::Server) -> Result<()> {
     let (service, socket) = LspService::new(|client| Backend {
         client,
         stdlib_completions: get_completions_from_stdlib(&stdlib),
+        token_map: Default::default(),
+        ast_map: Default::default(),
     });
 
     if opts.stdio {
