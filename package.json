@@ -1,6 +1,6 @@
 {
-	"name": "kcl-language-server",
-	"description": "KCL language server",
+  "name": "kcl-language-server",
+  "description": "KCL language server",
   "license": "MIT",
   "version": "1.5.0",
   "categories": [],
@@ -9,7 +9,7 @@
     "tower-lsp"
   ],
   "repository": {
-    "url": "https://github.com/kittycad/kcl-language-server",
+    "url": "https://github.com/kittycad/kcl-language-server"
   },
   "engines": {
     "vscode": "^1.66.0"
@@ -57,6 +57,7 @@
     "esbuild-base": "esbuild ./client/src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
     "esbuild": "yarn run esbuild-base -- --sourcemap",
     "esbuild-watch": "yarn run esbuild-base -- --sourcemap --watch",
+    "fmt": "prettier --write ./client",
     "test-compile": "tsc -p ./",
     "compile": "cross-env NODE_ENV=production tsc -b",
     "watch": "rm -rf dist && tsc -b -w",
@@ -80,6 +81,7 @@
     "eslint": "^7.6.0",
     "glob": "^7.1.7",
     "mocha": "^8.0.1",
+    "prettier": "^3.0.3",
     "typescript": "^4.4.3",
     "vscode-test": "^1.4.0",
     "vscode-uri": "^3.0.2",
@@ -87,5 +89,11 @@
   },
   "dependencies": {
     "vscode-languageclient": "^8.0.2"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true
   }
 }
