@@ -1,5 +1,6 @@
 [package]
 name = "kcl-lsp"
+description = "A language server for KCL."
 version = "0.1.0"
 edition = "2021"
 
