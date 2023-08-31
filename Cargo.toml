@@ -11,6 +11,7 @@ edition = "2021"
 anyhow = "1.0.75"
 clap = { version = "4.4.1", features = ["cargo", "derive", "env", "unicode"] }
 lazy_static = "1.4.0"
+log = { version = "0.4.20", features = ["serde"] }
 signal-hook = "0.3.17"
 slog = "2.7.0"
 slog-async = "2.8.0"
