@@ -41,15 +41,16 @@ export async function activate(context: ExtensionContext) {
   const traceOutputChannel = window.createOutputChannel(
     'KCL Language Server trace'
   )
-  const socket: SocketTransport = {
+  // Eventually make this work for tcp.
+  /*const socket: SocketTransport = {
     kind: TransportKind.socket,
     port: 6000,
-  }
+  }*/
   let command = process.env.SERVER_PATH || 'kcl-language-server'
   const run: Executable = {
     command,
     args: ['--json', 'server'],
-    transport: socket,
+    transport: TransportKind.stdio,
     options: {
       env: {
         ...process.env,

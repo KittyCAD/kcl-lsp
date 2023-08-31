@@ -1,7 +1,6 @@
 //! Functions for the `kcl` lsp server.
 
 use anyhow::Result;
-use log::info;
 use signal_hook::{
     consts::{SIGINT, SIGTERM},
     iterator::Signals,
@@ -20,7 +19,10 @@ struct Backend {
 #[tower_lsp::async_trait]
 impl LanguageServer for Backend {
     async fn initialize(&self, params: InitializeParams) -> RpcResult<InitializeResult> {
-        log::info!("initialize params: {:?}", params);
+        self.client
+            .log_message(MessageType::INFO, format!("initialize: {:?}", params))
+            .await;
+
         Ok(InitializeResult {
             capabilities: ServerCapabilities {
                 inlay_hint_provider: Some(OneOf::Left(true)),
@@ -67,8 +69,9 @@ impl LanguageServer for Backend {
     }
 
     async fn initialized(&self, params: InitializedParams) {
-        log::info!("server initialized: {:?}", params);
-        self.client.log_message(MessageType::INFO, "server initialized!").await;
+        self.client
+            .log_message(MessageType::INFO, format!("initialized: {:?}", params))
+            .await;
     }
 
     async fn shutdown(&self) -> RpcResult<()> {
@@ -76,46 +79,62 @@ impl LanguageServer for Backend {
     }
 
     async fn hover(&self, params: HoverParams) -> RpcResult<Option<Hover>> {
-        log::info!("hover: {:?}", params);
-        todo!()
+        self.client
+            .log_message(MessageType::INFO, format!("hover: {:?}", params))
+            .await;
+        Ok(None)
     }
 
     async fn goto_definition(&self, params: GotoDefinitionParams) -> RpcResult<Option<GotoDefinitionResponse>> {
-        log::info!("goto definition: {:?}", params);
-        todo!()
+        self.client
+            .log_message(MessageType::INFO, format!("goto_definition: {:?}", params))
+            .await;
+        Ok(None)
     }
 
     async fn references(&self, params: ReferenceParams) -> RpcResult<Option<Vec<Location>>> {
-        log::info!("references: {:?}", params);
-        todo!()
+        self.client
+            .log_message(MessageType::INFO, format!("references: {:?}", params))
+            .await;
+        Ok(None)
     }
 
     async fn semantic_tokens_full(&self, params: SemanticTokensParams) -> RpcResult<Option<SemanticTokensResult>> {
-        log::info!("semantic tokens full: {:?}", params);
-        todo!()
+        self.client
+            .log_message(MessageType::INFO, format!("semantic_tokens_full: {:?}", params))
+            .await;
+        Ok(None)
     }
 
     async fn semantic_tokens_range(
         &self,
         params: SemanticTokensRangeParams,
     ) -> RpcResult<Option<SemanticTokensRangeResult>> {
-        log::info!("semantic tokens range: {:?}", params);
-        todo!()
+        self.client
+            .log_message(MessageType::INFO, format!("semantic_tokens_range: {:?}", params))
+            .await;
+        Ok(None)
     }
 
     async fn inlay_hint(&self, params: tower_lsp::lsp_types::InlayHintParams) -> RpcResult<Option<Vec<InlayHint>>> {
-        log::info!("inlay hint: {:?}", params);
-        todo!()
+        self.client
+            .log_message(MessageType::INFO, format!("inlay_hint: {:?}", params))
+            .await;
+        Ok(None)
     }
 
     async fn completion(&self, params: CompletionParams) -> RpcResult<Option<CompletionResponse>> {
-        log::info!("completion: {:?}", params);
-        todo!()
+        self.client
+            .log_message(MessageType::INFO, format!("completion: {:?}", params))
+            .await;
+        Ok(None)
     }
 
     async fn rename(&self, params: RenameParams) -> RpcResult<Option<WorkspaceEdit>> {
-        log::info!("rename: {:?}", params);
-        todo!()
+        self.client
+            .log_message(MessageType::INFO, format!("rename: {:?}", params))
+            .await;
+        Ok(None)
     }
 }
 
@@ -129,11 +148,11 @@ pub async fn run(opts: &crate::Server) -> Result<()> {
 
     tokio::spawn(async move {
         for sig in signals.forever() {
-            info!("received signal: {:?}", sig);
-            info!("triggering cleanup...");
+            log::info!("received signal: {:?}", sig);
+            log::info!("triggering cleanup...");
 
             // Exit the process.
-            info!("all clean, exiting!");
+            log::info!("all clean, exiting!");
             std::process::exit(0);
         }
     });
@@ -142,13 +161,11 @@ pub async fn run(opts: &crate::Server) -> Result<()> {
 
     if opts.stdio {
         // Listen on stdin and stdout.
-        log::info!("Listening on stdin/stdout");
         let stdin = tokio::io::stdin();
         let stdout = tokio::io::stdout();
         LspServer::new(stdin, stdout, socket).serve(service).await;
     } else {
         // Listen on a tcp stream.
-        log::info!("Listening on {}", opts.socket);
         let listener = tokio::net::TcpListener::bind(&format!("0.0.0.0:{}", opts.socket)).await?;
         let (stream, _) = listener.accept().await?;
         let (read, write) = tokio::io::split(stream);
