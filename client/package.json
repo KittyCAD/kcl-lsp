@@ -1,6 +1,6 @@
 {
-	"name": "kcl-lsp",
-	"description": "KCL language server",
+	"name": "kcl-language-client",
+	"description": "Client for the KCL language server",
 	"license": "MIT",
 	"version": "0.0.1",
 	"engines": {
