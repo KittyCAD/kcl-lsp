@@ -200,6 +200,8 @@ impl LanguageServer for Backend {
             CompletionItem::new_simple("|>".to_string(), "A pipe operator.".to_string()),
             CompletionItem::new_simple("let".to_string(), "A let binding.".to_string()),
             CompletionItem::new_simple("const".to_string(), "A const binding.".to_string()),
+            CompletionItem::new_simple("var".to_string(), "A var binding.".to_string()),
+            CompletionItem::new_simple("fn".to_string(), "A function binding.".to_string()),
             CompletionItem::new_simple("show".to_string(), "Show a model.".to_string()),
         ];
         completions.extend(self.stdlib_completions.clone());
