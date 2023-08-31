@@ -176,10 +176,36 @@ fn get_completions_from_stdlib(stdlib: &kcl_lib::std::StdLib) -> Vec<CompletionI
     let mut fns = Vec::new();
 
     for internal_fn in &stdlib.internal_fn_names {
-        fns.push(CompletionItem::new_simple(
-            internal_fn.name(),
-            internal_fn.description(),
-        ));
+        fns.push(CompletionItem {
+            label: internal_fn.name(),
+            label_details: Some(CompletionItemLabelDetails {
+                detail: Some(internal_fn.fn_signature().replace(&internal_fn.name(), "")),
+                description: None,
+            }),
+            kind: Some(CompletionItemKind::FUNCTION),
+            detail: None,
+            documentation: Some(Documentation::MarkupContent(MarkupContent {
+                kind: MarkupKind::Markdown,
+                value: if !internal_fn.description().is_empty() {
+                    format!("{}\n\n{}", internal_fn.summary(), internal_fn.description())
+                } else {
+                    internal_fn.summary()
+                },
+            })),
+            deprecated: Some(internal_fn.deprecated()),
+            preselect: None,
+            sort_text: None,
+            filter_text: None,
+            insert_text: None,
+            insert_text_format: None,
+            insert_text_mode: None,
+            text_edit: None,
+            additional_text_edits: None,
+            command: None,
+            commit_characters: None,
+            data: None,
+            tags: None,
+        });
     }
 
     fns
