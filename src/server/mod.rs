@@ -1,5 +1,7 @@
 //! Functions for the `kcl` lsp server.
 
+use std::sync::Arc;
+
 use anyhow::Result;
 use signal_hook::{
     consts::{SIGINT, SIGTERM},
@@ -10,10 +12,11 @@ use tower_lsp::{jsonrpc::Result as RpcResult, lsp_types::*, Client, LanguageServ
 use crate::lang::semantic_tokens::LEGEND_TYPE;
 
 /// The lsp server backend.
-#[derive(Debug)]
 struct Backend {
     /// The client for the backend.
     client: Client,
+    /// The stdlib completions for the language.
+    stdlib_completions: Vec<CompletionItem>,
 }
 
 #[tower_lsp::async_trait]
@@ -25,43 +28,14 @@ impl LanguageServer for Backend {
 
         Ok(InitializeResult {
             capabilities: ServerCapabilities {
-                inlay_hint_provider: Some(OneOf::Left(true)),
-                text_document_sync: Some(TextDocumentSyncCapability::Kind(TextDocumentSyncKind::FULL)),
+                hover_provider: Some(HoverProviderCapability::Simple(true)),
                 completion_provider: Some(CompletionOptions {
                     resolve_provider: Some(false),
                     trigger_characters: Some(vec![".".to_string()]),
                     work_done_progress_options: Default::default(),
                     all_commit_characters: None,
-                    completion_item: None,
+                    ..Default::default()
                 }),
-                hover_provider: Some(HoverProviderCapability::Simple(true)),
-                semantic_tokens_provider: Some(SemanticTokensServerCapabilities::SemanticTokensRegistrationOptions(
-                    SemanticTokensRegistrationOptions {
-                        text_document_registration_options: {
-                            TextDocumentRegistrationOptions {
-                                document_selector: Some(vec![DocumentFilter {
-                                    language: Some("kcl".to_string()),
-                                    scheme: Some("file".to_string()),
-                                    pattern: None,
-                                }]),
-                            }
-                        },
-                        semantic_tokens_options: SemanticTokensOptions {
-                            work_done_progress_options: WorkDoneProgressOptions::default(),
-                            legend: SemanticTokensLegend {
-                                token_types: LEGEND_TYPE.into(),
-                                token_modifiers: vec![],
-                            },
-                            range: Some(true),
-                            full: Some(SemanticTokensFullOptions::Bool(true)),
-                        },
-                        static_registration_options: StaticRegistrationOptions::default(),
-                    },
-                )),
-                // definition: Some(GotoCapability::default()),
-                definition_provider: Some(OneOf::Left(true)),
-                references_provider: Some(OneOf::Left(true)),
-                rename_provider: Some(OneOf::Left(true)),
                 ..Default::default()
             },
             ..Default::default()
@@ -83,8 +57,25 @@ impl LanguageServer for Backend {
         self.client
             .log_message(MessageType::INFO, format!("hover: {:?}", params))
             .await;
-        todo!();
-        Ok(None)
+        Ok(Some(Hover {
+            contents: HoverContents::Scalar(MarkedString::String("You're hovering!".to_string())),
+            range: None,
+        }))
+    }
+
+    async fn completion(&self, params: CompletionParams) -> RpcResult<Option<CompletionResponse>> {
+        self.client
+            .log_message(MessageType::INFO, format!("completion: {:?}", params))
+            .await;
+
+        let mut completions = vec![
+            CompletionItem::new_simple("|>".to_string(), "A pipe operator.".to_string()),
+            CompletionItem::new_simple("let".to_string(), "A let binding.".to_string()),
+            CompletionItem::new_simple("const".to_string(), "A const binding.".to_string()),
+            CompletionItem::new_simple("show".to_string(), "Show a model.".to_string()),
+        ];
+        completions.extend(self.stdlib_completions.clone());
+        Ok(Some(CompletionResponse::Array(completions)))
     }
 
     async fn goto_definition(&self, params: GotoDefinitionParams) -> RpcResult<Option<GotoDefinitionResponse>> {
@@ -130,14 +121,6 @@ impl LanguageServer for Backend {
         Ok(None)
     }
 
-    async fn completion(&self, params: CompletionParams) -> RpcResult<Option<CompletionResponse>> {
-        self.client
-            .log_message(MessageType::INFO, format!("completion: {:?}", params))
-            .await;
-        todo!();
-        Ok(None)
-    }
-
     async fn rename(&self, params: RenameParams) -> RpcResult<Option<WorkspaceEdit>> {
         self.client
             .log_message(MessageType::INFO, format!("rename: {:?}", params))
@@ -166,7 +149,12 @@ pub async fn run(opts: &crate::Server) -> Result<()> {
         }
     });
 
-    let (service, socket) = LspService::new(|client| Backend { client });
+    let stdlib = kcl_lib::std::StdLib::new();
+
+    let (service, socket) = LspService::new(|client| Backend {
+        client,
+        stdlib_completions: get_completions_from_stdlib(&stdlib),
+    });
 
     if opts.stdio {
         // Listen on stdin and stdout.
@@ -182,4 +170,17 @@ pub async fn run(opts: &crate::Server) -> Result<()> {
     }
 
     Ok(())
+}
+
+fn get_completions_from_stdlib(stdlib: &kcl_lib::std::StdLib) -> Vec<CompletionItem> {
+    let mut fns = Vec::new();
+
+    for internal_fn in &stdlib.internal_fn_names {
+        fns.push(CompletionItem::new_simple(
+            internal_fn.name(),
+            internal_fn.description(),
+        ));
+    }
+
+    fns
 }
