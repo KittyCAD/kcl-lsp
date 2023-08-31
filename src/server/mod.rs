@@ -75,6 +75,7 @@ impl LanguageServer for Backend {
     }
 
     async fn shutdown(&self) -> RpcResult<()> {
+        self.client.log_message(MessageType::INFO, "shutdown".to_string()).await;
         Ok(())
     }
 
@@ -82,6 +83,7 @@ impl LanguageServer for Backend {
         self.client
             .log_message(MessageType::INFO, format!("hover: {:?}", params))
             .await;
+        todo!();
         Ok(None)
     }
 
@@ -89,6 +91,7 @@ impl LanguageServer for Backend {
         self.client
             .log_message(MessageType::INFO, format!("goto_definition: {:?}", params))
             .await;
+        todo!();
         Ok(None)
     }
 
@@ -96,6 +99,7 @@ impl LanguageServer for Backend {
         self.client
             .log_message(MessageType::INFO, format!("references: {:?}", params))
             .await;
+        todo!();
         Ok(None)
     }
 
@@ -103,6 +107,7 @@ impl LanguageServer for Backend {
         self.client
             .log_message(MessageType::INFO, format!("semantic_tokens_full: {:?}", params))
             .await;
+        todo!();
         Ok(None)
     }
 
@@ -113,6 +118,7 @@ impl LanguageServer for Backend {
         self.client
             .log_message(MessageType::INFO, format!("semantic_tokens_range: {:?}", params))
             .await;
+        todo!();
         Ok(None)
     }
 
@@ -120,6 +126,7 @@ impl LanguageServer for Backend {
         self.client
             .log_message(MessageType::INFO, format!("inlay_hint: {:?}", params))
             .await;
+        todo!();
         Ok(None)
     }
 
@@ -127,6 +134,7 @@ impl LanguageServer for Backend {
         self.client
             .log_message(MessageType::INFO, format!("completion: {:?}", params))
             .await;
+        todo!();
         Ok(None)
     }
 
@@ -134,6 +142,7 @@ impl LanguageServer for Backend {
         self.client
             .log_message(MessageType::INFO, format!("rename: {:?}", params))
             .await;
+        todo!();
         Ok(None)
     }
 }
@@ -148,11 +157,11 @@ pub async fn run(opts: &crate::Server) -> Result<()> {
 
     tokio::spawn(async move {
         for sig in signals.forever() {
-            /*    log::info!("received signal: {:?}", sig);
+            log::info!("received signal: {:?}", sig);
             log::info!("triggering cleanup...");
 
             // Exit the process.
-            log::info!("all clean, exiting!");*/
+            log::info!("all clean, exiting!");
             std::process::exit(0);
         }
     });
