@@ -28,7 +28,10 @@ import {
   Executable,
   LanguageClient,
   LanguageClientOptions,
+  MessageTransports,
   ServerOptions,
+  SocketTransport,
+  TransportKind,
 } from 'vscode-languageclient/node'
 
 let client: LanguageClient
@@ -38,9 +41,15 @@ export async function activate(context: ExtensionContext) {
   const traceOutputChannel = window.createOutputChannel(
     'KCL Language Server trace'
   )
-  const command = process.env.SERVER_PATH || 'kcl-language-server'
+  const socket: SocketTransport = {
+    kind: TransportKind.socket,
+    port: 6000,
+  }
+  let command = process.env.SERVER_PATH || 'kcl-language-server'
   const run: Executable = {
     command,
+    args: ['--json', 'server'],
+    transport: socket,
     options: {
       env: {
         ...process.env,

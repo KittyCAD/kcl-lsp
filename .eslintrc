@@ -2,11 +2,12 @@
     "plugins": [
     ],
     "extends": [
+        "react-app"
     ],
     "rules": {
-      "semi": [
-        "error",
-        "never"
-      ]
+        "semi": [
+            "error",
+            "never"
+        ]
     }
 }

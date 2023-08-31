@@ -79,9 +79,9 @@ pub enum SubCommand {
 /// A subcommand for running the server.
 #[derive(Parser, Clone, Debug)]
 pub struct Server {
-    /// IP address and port that the server should listen
-    #[clap(short, long, default_value = "0.0.0.0:8080")]
-    pub address: String,
+    /// Port that the server should listen
+    #[clap(long, default_value = "8080")]
+    pub socket: i32,
 
     /// Listen over stdin and stdout instead of a tcp socket.
     #[clap(short, long, default_value = "false")]

@@ -1,9 +1,6 @@
 //! Functions for the `kcl` lsp server.
 
-use std::collections::HashMap;
-
 use anyhow::Result;
-use dashmap::DashMap;
 use log::info;
 use signal_hook::{
     consts::{SIGINT, SIGTERM},
@@ -151,8 +148,8 @@ pub async fn run(opts: &crate::Server) -> Result<()> {
         LspServer::new(stdin, stdout, socket).serve(service).await;
     } else {
         // Listen on a tcp stream.
-        log::info!("Listening on {}", opts.address);
-        let listener = tokio::net::TcpListener::bind(&opts.address).await?;
+        log::info!("Listening on {}", opts.socket);
+        let listener = tokio::net::TcpListener::bind(&format!("0.0.0.0:{}", opts.socket)).await?;
         let (stream, _) = listener.accept().await?;
         let (read, write) = tokio::io::split(stream);
         LspServer::new(read, write, socket).serve(service).await;

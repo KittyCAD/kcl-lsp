@@ -1,0 +1,40 @@
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.json'
+      - '**.js'
+      - '**.ts'
+      - .github/workflows/yarn.yml
+  pull_request:
+    paths:
+      - '**.json'
+      - '**.js'
+      - '**.ts'
+      - .github/workflows/yarn.yml
+permissions:
+  packages: read
+  contents: read
+name: yarn
+jobs:
+  yarnfmt:
+    name: yarn fmt-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: yarn install
+      - run: yarn fmt-check
+  yarntest:
+    name: yarn test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: yarn install
+      - run: yarn test
