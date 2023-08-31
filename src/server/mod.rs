@@ -59,10 +59,7 @@ impl Backend {
                     for declaration in &variable.declarations {
                         completions.push(CompletionItem {
                             label: declaration.id.name.to_string(),
-                            label_details: Some(CompletionItemLabelDetails {
-                                detail: Some(variable.kind.to_string()),
-                                description: None,
-                            }),
+                            label_details: None,
                             kind: Some(match variable.kind {
                                 kcl_lib::abstract_syntax_tree_types::VariableKind::Let => CompletionItemKind::VARIABLE,
                                 kcl_lib::abstract_syntax_tree_types::VariableKind::Const => {
@@ -71,7 +68,7 @@ impl Backend {
                                 kcl_lib::abstract_syntax_tree_types::VariableKind::Var => CompletionItemKind::VARIABLE,
                                 kcl_lib::abstract_syntax_tree_types::VariableKind::Fn => CompletionItemKind::FUNCTION,
                             }),
-                            detail: None,
+                            detail: Some(variable.kind.to_string()),
                             documentation: None,
                             deprecated: None,
                             preselect: None,
