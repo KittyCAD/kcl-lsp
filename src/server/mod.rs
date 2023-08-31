@@ -8,6 +8,18 @@ use signal_hook::{
 };
 use tower_lsp::{jsonrpc::Result as RpcResult, lsp_types::*, Client, LanguageServer, LspService, Server as LspServer};
 
+/// The type of semantic tokens legend.
+pub const LEGEND_TYPE: &[SemanticTokenType] = &[
+    SemanticTokenType::FUNCTION,
+    SemanticTokenType::VARIABLE,
+    SemanticTokenType::STRING,
+    SemanticTokenType::COMMENT,
+    SemanticTokenType::NUMBER,
+    SemanticTokenType::KEYWORD,
+    SemanticTokenType::OPERATOR,
+    SemanticTokenType::PARAMETER,
+];
+
 /// The lsp server backend.
 #[derive(Debug)]
 struct Backend {
@@ -17,16 +29,74 @@ struct Backend {
 
 #[tower_lsp::async_trait]
 impl LanguageServer for Backend {
-    async fn initialize(&self, _: InitializeParams) -> RpcResult<InitializeResult> {
-        Ok(InitializeResult::default())
+    async fn initialize(&self, params: InitializeParams) -> RpcResult<InitializeResult> {
+        log::info!("initialize params: {:?}", params);
+        Ok(InitializeResult {
+            capabilities: ServerCapabilities {
+                inlay_hint_provider: Some(OneOf::Left(true)),
+                text_document_sync: Some(TextDocumentSyncCapability::Kind(TextDocumentSyncKind::FULL)),
+                completion_provider: Some(CompletionOptions {
+                    resolve_provider: Some(false),
+                    trigger_characters: Some(vec![".".to_string()]),
+                    work_done_progress_options: Default::default(),
+                    all_commit_characters: None,
+                    completion_item: None,
+                }),
+                hover_provider: Some(HoverProviderCapability::Simple(true)),
+                semantic_tokens_provider: Some(SemanticTokensServerCapabilities::SemanticTokensRegistrationOptions(
+                    SemanticTokensRegistrationOptions {
+                        text_document_registration_options: {
+                            TextDocumentRegistrationOptions {
+                                document_selector: Some(vec![DocumentFilter {
+                                    language: Some("nrs".to_string()),
+                                    scheme: Some("file".to_string()),
+                                    pattern: None,
+                                }]),
+                            }
+                        },
+                        semantic_tokens_options: SemanticTokensOptions {
+                            work_done_progress_options: WorkDoneProgressOptions::default(),
+                            legend: SemanticTokensLegend {
+                                token_types: LEGEND_TYPE.into(),
+                                token_modifiers: vec![],
+                            },
+                            range: Some(true),
+                            full: Some(SemanticTokensFullOptions::Bool(true)),
+                        },
+                        static_registration_options: StaticRegistrationOptions::default(),
+                    },
+                )),
+                // definition: Some(GotoCapability::default()),
+                definition_provider: Some(OneOf::Left(true)),
+                references_provider: Some(OneOf::Left(true)),
+                rename_provider: Some(OneOf::Left(true)),
+                ..Default::default()
+            },
+            ..Default::default()
+        })
     }
 
-    async fn initialized(&self, _: InitializedParams) {
+    async fn initialized(&self, params: InitializedParams) {
+        log::info!("server initialized: {:?}", params);
         self.client.log_message(MessageType::INFO, "server initialized!").await;
     }
 
     async fn shutdown(&self) -> RpcResult<()> {
         Ok(())
+    }
+
+    async fn completion(&self, _: CompletionParams) -> RpcResult<Option<CompletionResponse>> {
+        Ok(Some(CompletionResponse::Array(vec![
+            CompletionItem::new_simple("Hello".to_string(), "Some detail".to_string()),
+            CompletionItem::new_simple("Bye".to_string(), "More detail".to_string()),
+        ])))
+    }
+
+    async fn hover(&self, _: HoverParams) -> RpcResult<Option<Hover>> {
+        Ok(Some(Hover {
+            contents: HoverContents::Scalar(MarkedString::String("You're hovering!".to_string())),
+            range: None,
+        }))
     }
 }
 
@@ -49,11 +119,22 @@ pub async fn run(opts: &crate::Server) -> Result<()> {
         }
     });
 
-    let stdin = tokio::io::stdin();
-    let stdout = tokio::io::stdout();
-
     let (service, socket) = LspService::new(|client| Backend { client });
-    LspServer::new(stdin, stdout, socket).serve(service).await;
+
+    if opts.stdio {
+        // Listen on stdin and stdout.
+        log::info!("Listening on stdin/stdout");
+        let stdin = tokio::io::stdin();
+        let stdout = tokio::io::stdout();
+        LspServer::new(stdin, stdout, socket).serve(service).await;
+    } else {
+        // Listen on a tcp stream.
+        log::info!("Listening on {}", opts.address);
+        let listener = tokio::net::TcpListener::bind(&opts.address).await?;
+        let (stream, _) = listener.accept().await?;
+        let (read, write) = tokio::io::split(stream);
+        LspServer::new(read, write, socket).serve(service).await;
+    }
 
     Ok(())
 }

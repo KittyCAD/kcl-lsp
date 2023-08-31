@@ -54,4 +54,4 @@ ARG BUILD_MODE=debug
 COPY --from=linkerd /tmp/linkerd-await /usr/bin/linkerd-await
 COPY --from=cargo-build /usr/src/kcl-lsp/target/${BUILD_MODE}/kcl-lsp /usr/bin/kcl-lsp
 
-CMD ["kcl-lsp"]
+CMD ["kcl-lsp", "--json", "server"]
