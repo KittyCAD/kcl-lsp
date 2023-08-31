@@ -41,6 +41,59 @@ impl Backend {
         };
         self.ast_map.insert(params.uri.to_string(), ast);
     }
+
+    async fn completions_get_variables_from_ast(&self, file_name: &str) -> Vec<CompletionItem> {
+        let mut completions = vec![];
+
+        let ast = match self.ast_map.get(file_name) {
+            Some(ast) => ast,
+            None => return completions,
+        };
+
+        for item in &ast.body {
+            match item {
+                kcl_lib::abstract_syntax_tree_types::BodyItem::ExpressionStatement(_) => continue,
+                kcl_lib::abstract_syntax_tree_types::BodyItem::ReturnStatement(_) => continue,
+                kcl_lib::abstract_syntax_tree_types::BodyItem::VariableDeclaration(variable) => {
+                    // We only want to complete variables.
+                    for declaration in &variable.declarations {
+                        completions.push(CompletionItem {
+                            label: declaration.id.name.to_string(),
+                            label_details: Some(CompletionItemLabelDetails {
+                                detail: Some(variable.kind.to_string()),
+                                description: None,
+                            }),
+                            kind: Some(match variable.kind {
+                                kcl_lib::abstract_syntax_tree_types::VariableKind::Let => CompletionItemKind::VARIABLE,
+                                kcl_lib::abstract_syntax_tree_types::VariableKind::Const => {
+                                    CompletionItemKind::CONSTANT
+                                }
+                                kcl_lib::abstract_syntax_tree_types::VariableKind::Var => CompletionItemKind::VARIABLE,
+                                kcl_lib::abstract_syntax_tree_types::VariableKind::Fn => CompletionItemKind::FUNCTION,
+                            }),
+                            detail: None,
+                            documentation: None,
+                            deprecated: None,
+                            preselect: None,
+                            sort_text: None,
+                            filter_text: None,
+                            insert_text: None,
+                            insert_text_format: None,
+                            insert_text_mode: None,
+                            text_edit: None,
+                            additional_text_edits: None,
+                            command: None,
+                            commit_characters: None,
+                            data: None,
+                            tags: None,
+                        });
+                    }
+                }
+            }
+        }
+
+        completions
+    }
 }
 
 #[tower_lsp::async_trait]
@@ -154,8 +207,12 @@ impl LanguageServer for Backend {
         ];
         completions.extend(self.stdlib_completions.clone());
 
-        // TODO: we need to add all the consts and vars to our completions, unless another
-        // default plugin does this.
+        // Get our variables from our AST to include in our completions.
+        completions.extend(
+            self.completions_get_variables_from_ast(params.text_document_position.text_document.uri.as_ref())
+                .await,
+        );
+
         Ok(Some(CompletionResponse::Array(completions)))
     }
 }
