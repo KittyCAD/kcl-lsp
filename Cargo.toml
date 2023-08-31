@@ -8,4 +8,4 @@ edition = "2021"
 
 [dependencies]
 tokio = { version = "1.32.0", features = ["full"] }
-tower-lsp = "0.20.0"
+tower-lsp = { version = "0.20.0", features = ["proposed"] }
