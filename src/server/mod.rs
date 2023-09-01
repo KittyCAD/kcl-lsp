@@ -18,15 +18,15 @@ pub struct Server {
 }
 
 /// The lsp server backend.
-struct Backend {
+pub struct Backend {
     /// The client for the backend.
-    client: Client,
+    pub client: Client,
     /// The stdlib completions for the language.
-    stdlib_completions: Vec<CompletionItem>,
+    pub stdlib_completions: Vec<CompletionItem>,
     /// Token maps.
-    token_map: DashMap<String, Vec<kcl_lib::tokeniser::Token>>,
+    pub token_map: DashMap<String, Vec<kcl_lib::tokeniser::Token>>,
     /// AST maps.
-    ast_map: DashMap<String, kcl_lib::abstract_syntax_tree_types::Program>,
+    pub ast_map: DashMap<String, kcl_lib::abstract_syntax_tree_types::Program>,
 }
 
 impl Backend {
@@ -268,7 +268,8 @@ pub async fn run(opts: &Server) -> Result<()> {
     Ok(())
 }
 
-fn get_completions_from_stdlib(stdlib: &kcl_lib::std::StdLib) -> Vec<CompletionItem> {
+/// Get completions from our stdlib.
+pub fn get_completions_from_stdlib(stdlib: &kcl_lib::std::StdLib) -> Vec<CompletionItem> {
     let mut fns = Vec::new();
 
     for internal_fn in &stdlib.internal_fn_names {

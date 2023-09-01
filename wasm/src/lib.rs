@@ -1,5 +1,5 @@
 use futures::stream::TryStreamExt;
-use kcl_language_server::server::Backend;
+use kcl_language_server::server::{get_completions_from_stdlib, Backend};
 use tower_lsp::{LspService, Server};
 use wasm_bindgen::{prelude::*, JsCast};
 use wasm_bindgen_futures::stream::JsStream;
