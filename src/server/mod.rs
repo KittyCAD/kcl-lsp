@@ -277,8 +277,27 @@ fn get_completions_from_stdlib(stdlib: &kcl_lib::std::StdLib) -> Vec<CompletionI
             preselect: None,
             sort_text: None,
             filter_text: None,
-            insert_text: None,
-            insert_text_format: None,
+            insert_text: Some(format!(
+                "{}({})",
+                internal_fn.name(),
+                internal_fn
+                    .args()
+                    .iter()
+                    .enumerate()
+                    // It is okay to unwrap here since in the `kcl-lib` tests, we would have caught
+                    // any errors in the `internal_fn`'s signature.
+                    .map(|(index, item)| {
+                        let format = item.get_autocomplete_string().unwrap();
+                        if item.type_ == "SketchGroup" || item.type_ == "ExtrudeGroup" {
+                            format!("${{{}:{}}}", index + 1, "%")
+                        } else {
+                            format!("${{{}:{}}}", index + 1, format)
+                        }
+                    })
+                    .collect::<Vec<_>>()
+                    .join(",")
+            )),
+            insert_text_format: Some(InsertTextFormat::SNIPPET),
             insert_text_mode: None,
             text_edit: None,
             additional_text_edits: None,
