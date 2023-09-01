@@ -1,15 +1,22 @@
+#[cfg(target_arch = "wasm32")]
 use futures::stream::TryStreamExt;
+#[cfg(target_arch = "wasm32")]
 use kcl_language_server::server::{get_completions_from_stdlib, Backend};
+#[cfg(target_arch = "wasm32")]
 use tower_lsp::{LspService, Server};
+#[cfg(target_arch = "wasm32")]
 use wasm_bindgen::{prelude::*, JsCast};
+#[cfg(target_arch = "wasm32")]
 use wasm_bindgen_futures::stream::JsStream;
 
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 pub struct ServerConfig {
     into_server: js_sys::AsyncIterator,
     from_server: web_sys::WritableStream,
 }
 
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 impl ServerConfig {
     #[wasm_bindgen(constructor)]
@@ -28,6 +35,7 @@ impl ServerConfig {
 // and so far only Chromium-based browsers support that functionality.
 
 // NOTE: input needs to be an AsyncIterator<Uint8Array, never, void> specifically
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 pub async fn run(config: ServerConfig) -> Result<(), JsValue> {
     let ServerConfig {

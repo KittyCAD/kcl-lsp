@@ -7,8 +7,7 @@ edition = "2021"
 [lib]
 crate-type = ["cdylib", "rlib"]
 
-[dependencies]
-console_error_panic_hook = "0.1.7"
+[target.'cfg(target_arch = "wasm32")'.dependencies]
 futures = "0.3.28"
 js-sys = "0.3.64"
 kcl-language-server = { path = "../" }
@@ -19,7 +18,7 @@ wasm-bindgen = "0.2.87"
 wasm-bindgen-futures = { version = "0.4.37", features = ["futures-core-03-stream"] }
 wasm-streams = "0.3.0"
 
-[dependencies.web-sys]
+[target.'cfg(target_arch = "wasm32")'.dependencies.web-sys]
 version = "0.3.57"
 features = [
   "console",
