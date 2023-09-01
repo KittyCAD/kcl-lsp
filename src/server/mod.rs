@@ -1,12 +1,21 @@
 //! Functions for the `kcl` lsp server.
 
 use anyhow::Result;
+use clap::Parser;
 use dashmap::DashMap;
-use signal_hook::{
-    consts::{SIGINT, SIGTERM},
-    iterator::Signals,
-};
 use tower_lsp::{jsonrpc::Result as RpcResult, lsp_types::*, Client, LanguageServer, LspService, Server as LspServer};
+
+/// A subcommand for running the server.
+#[derive(Parser, Clone, Debug)]
+pub struct Server {
+    /// Port that the server should listen
+    #[clap(long, default_value = "8080")]
+    pub socket: i32,
+
+    /// Listen over stdin and stdout instead of a tcp socket.
+    #[clap(short, long, default_value = "false")]
+    pub stdio: bool,
+}
 
 /// The lsp server backend.
 struct Backend {
@@ -210,7 +219,22 @@ impl LanguageServer for Backend {
 }
 
 /// Run the `kcl` lsp server.
-pub async fn run(opts: &crate::Server) -> Result<()> {
+#[cfg(not(target_arch = "wasm32"))]
+pub async fn run(opts: &Server) -> Result<()> {
+    let stdlib = kcl_lib::std::StdLib::new();
+
+    let (service, socket) = LspService::new(|client| Backend {
+        client,
+        stdlib_completions: get_completions_from_stdlib(&stdlib),
+        token_map: Default::default(),
+        ast_map: Default::default(),
+    });
+
+    use signal_hook::{
+        consts::{SIGINT, SIGTERM},
+        iterator::Signals,
+    };
+
     // For Cloud run & ctrl+c, shutdown gracefully.
     // "The main process inside the container will receive SIGTERM, and after a grace period,
     // SIGKILL."
@@ -226,15 +250,6 @@ pub async fn run(opts: &crate::Server) -> Result<()> {
             log::info!("all clean, exiting!");
             std::process::exit(0);
         }
-    });
-
-    let stdlib = kcl_lib::std::StdLib::new();
-
-    let (service, socket) = LspService::new(|client| Backend {
-        client,
-        stdlib_completions: get_completions_from_stdlib(&stdlib),
-        token_map: Default::default(),
-        ast_map: Default::default(),
     });
 
     if opts.stdio {

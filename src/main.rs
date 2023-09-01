@@ -73,19 +73,7 @@ impl Opts {
 #[derive(Parser, Debug, Clone)]
 pub enum SubCommand {
     /// Run the server.
-    Server(Server),
-}
-
-/// A subcommand for running the server.
-#[derive(Parser, Clone, Debug)]
-pub struct Server {
-    /// Port that the server should listen
-    #[clap(long, default_value = "8080")]
-    pub socket: i32,
-
-    /// Listen over stdin and stdout instead of a tcp socket.
-    #[clap(short, long, default_value = "false")]
-    pub stdio: bool,
+    Server(crate::server::Server),
 }
 
 #[tokio::main]
