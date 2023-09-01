@@ -6,8 +6,6 @@ use kcl_language_server::server::{get_completions_from_stdlib, Backend};
 use tower_lsp::{LspService, Server};
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::{prelude::*, JsCast};
-#[cfg(target_arch = "wasm32")]
-use wasm_bindgen_futures::stream::JsStream;
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
