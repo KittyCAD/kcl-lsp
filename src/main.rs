@@ -148,6 +148,7 @@ async fn run_cmd(opts: &Opts) -> Result<()> {
                 ast_map: Default::default(),
                 current_code_map: Default::default(),
                 diagnostics_map: Default::default(),
+                symbols_map: Default::default(),
             });
 
             // For Cloud run & ctrl+c, shutdown gracefully.

@@ -424,8 +424,6 @@ checksum = "f2696e8a945f658fd14dc3b87242e6b80cd0f36ff04ea560fa39082368847946"
 [[package]]
 name = "derive-docs"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "075291fd1d6d70a886078f7b1c132a160559ceb9a0fe143177872d40ea587906"
 dependencies = [
  "convert_case",
  "proc-macro2",
