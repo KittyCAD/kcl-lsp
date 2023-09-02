@@ -2,12 +2,14 @@
 
 #![deny(missing_docs)]
 
-pub mod lang;
-pub mod server;
-
 use anyhow::{bail, Result};
 use clap::Parser;
+use signal_hook::{
+    consts::{SIGINT, SIGTERM},
+    iterator::Signals,
+};
 use slog::Drain;
+use tower_lsp::{LspService, Server as LspServer};
 use tracing_subscriber::{prelude::*, Layer};
 
 lazy_static::lazy_static! {
@@ -73,7 +75,7 @@ impl Opts {
 #[derive(Parser, Debug, Clone)]
 pub enum SubCommand {
     /// Run the server.
-    Server(crate::server::Server),
+    Server(kcl_lib::server::Server),
 }
 
 #[tokio::main]
@@ -134,7 +136,45 @@ async fn main() -> Result<()> {
 async fn run_cmd(opts: &Opts) -> Result<()> {
     match &opts.subcmd {
         SubCommand::Server(s) => {
-            crate::server::run(s).await?;
+            let stdlib = kcl_lib::std::StdLib::new();
+            let stdlib_completions = kcl_lib::server::get_completions_from_stdlib(&stdlib)?;
+
+            let (service, socket) = LspService::new(|client| kcl_lib::server::Backend {
+                client,
+                stdlib_completions,
+                token_map: Default::default(),
+                ast_map: Default::default(),
+            });
+
+            // For Cloud run & ctrl+c, shutdown gracefully.
+            // "The main process inside the container will receive SIGTERM, and after a grace period,
+            // SIGKILL."
+            // Regsitering SIGKILL here will panic at runtime, so let's avoid that.
+            let mut signals = Signals::new([SIGINT, SIGTERM])?;
+
+            tokio::spawn(async move {
+                for sig in signals.forever() {
+                    log::info!("received signal: {:?}", sig);
+                    log::info!("triggering cleanup...");
+
+                    // Exit the process.
+                    log::info!("all clean, exiting!");
+                    std::process::exit(0);
+                }
+            });
+
+            if s.stdio {
+                // Listen on stdin and stdout.
+                let stdin = tokio::io::stdin();
+                let stdout = tokio::io::stdout();
+                LspServer::new(stdin, stdout, socket).serve(service).await;
+            } else {
+                // Listen on a tcp stream.
+                let listener = tokio::net::TcpListener::bind(&format!("0.0.0.0:{}", s.socket)).await?;
+                let (stream, _) = listener.accept().await?;
+                let (read, write) = tokio::io::split(stream);
+                LspServer::new(read, write, socket).serve(service).await;
+            }
         }
     }
 

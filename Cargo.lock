@@ -830,12 +830,14 @@ dependencies = [
 
 [[package]]
 name = "kcl-lib"
-version = "0.1.10"
+version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "48716fe2998ce0b697f296d949bfbb524ac6a98d61b7d2db4af83bf64fc874c6"
+checksum = "92d43d3d0c849ba3b6ae9fc07343d59a1c1155553ce8a97e1488a63321f19ec1"
 dependencies = [
  "anyhow",
  "bson",
+ "clap",
+ "dashmap",
  "derive-docs",
  "futures",
  "js-sys",
@@ -850,6 +852,7 @@ dependencies = [
  "thiserror",
  "tokio",
  "tokio-tungstenite",
+ "tower-lsp",
  "ts-rs-json-value",
  "uuid",
  "wasm-bindgen",
@@ -2256,21 +2259,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
 
 [[package]]
-name = "wasm"
-version = "0.1.0"
-dependencies = [
- "futures",
- "js-sys",
- "kcl-language-server",
- "kcl-lib",
- "tower-lsp",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "wasm-streams",
- "web-sys",
-]
-
-[[package]]
 name = "wasm-bindgen"
 version = "0.2.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2302,7 +2290,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c02dbc21516f9f1f04f187958890d7e6026df8d16540b7ad9492bc34a67cea03"
 dependencies = [
  "cfg-if",
- "futures-core",
  "js-sys",
  "wasm-bindgen",
  "web-sys",
@@ -2336,19 +2323,6 @@ name = "wasm-bindgen-shared"
 version = "0.2.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ca6ad05a4870b2bf5fe995117d3728437bd27d7cd5f06f13c17443ef369775a1"
-
-[[package]]
-name = "wasm-streams"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b4609d447824375f43e1ffbc051b50ad8f4b3ae8219680c94452ea05eb240ac7"
-dependencies = [
- "futures-util",
- "js-sys",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "web-sys",
-]
 
 [[package]]
 name = "web-sys"
