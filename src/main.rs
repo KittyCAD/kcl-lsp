@@ -138,10 +138,12 @@ async fn run_cmd(opts: &Opts) -> Result<()> {
         SubCommand::Server(s) => {
             let stdlib = kcl_lib::std::StdLib::new();
             let stdlib_completions = kcl_lib::server::get_completions_from_stdlib(&stdlib)?;
+            let stdlib_signatures = kcl_lib::server::get_signatures_from_stdlib(&stdlib)?;
 
             let (service, socket) = LspService::new(|client| kcl_lib::server::Backend {
                 client,
                 stdlib_completions,
+                stdlib_signatures,
                 token_map: Default::default(),
                 ast_map: Default::default(),
                 current_code_map: Default::default(),
