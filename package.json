@@ -145,17 +145,13 @@
     "@vscode/test-electron": "^2.3.4",
     "@vscode/vsce": "^2.21.0",
     "cross-env": "^7.0.2",
-    "electron-rebuild": "^3.2.9",
     "esbuild": "^0.19.2",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^9.0.0",
     "glob": "^7.1.7",
     "mocha": "^8.0.1",
     "prettier": "^3.0.3",
-    "typescript": "^5.2.2",
-    "vscode-test": "^1.4.0",
-    "vscode-uri": "^3.0.2",
-    "webpack": "^5.82.1"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "vscode-languageclient": "^8.0.2"
