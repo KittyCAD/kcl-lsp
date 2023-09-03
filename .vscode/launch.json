@@ -21,7 +21,7 @@
         "--extensionDevelopmentPath=${workspaceFolder}/editors/code"
       ],
       "outFiles": [
-        "${workspaceFolder}/editors/code/out/**/*.js"
+        "${workspaceFolder}/dist/**/*.js"
       ],
       "preLaunchTask": "Build Extension",
       "skipFiles": [
@@ -39,7 +39,7 @@
         "--extensionDevelopmentPath=${workspaceFolder}/editors/code"
       ],
       "outFiles": [
-        "${workspaceFolder}/editors/code/out/**/*.js"
+        "${workspaceFolder}/dist/**/*.js"
       ],
       "preLaunchTask": "Build Server and Extension",
       "skipFiles": [
@@ -60,7 +60,7 @@
         "--extensionDevelopmentPath=${workspaceFolder}/editors/code"
       ],
       "outFiles": [
-        "${workspaceFolder}/editors/code/out/**/*.js"
+        "${workspaceFolder}/dist/**/*.js"
       ],
       "preLaunchTask": "Build Server (Release) and Extension",
       "skipFiles": [
@@ -82,7 +82,7 @@
         "--extensionDevelopmentPath=${workspaceFolder}/editors/code"
       ],
       "outFiles": [
-        "${workspaceFolder}/editors/code/out/**/*.js"
+        "${workspaceFolder}/dist/**/*.js"
       ],
       "preLaunchTask": "Build Server (Release) and Extension",
       "skipFiles": [
@@ -116,9 +116,9 @@
       "runtimeExecutable": "${execPath}",
       "args": [
           "--extensionDevelopmentPath=${workspaceFolder}/editors/code",
-          "--extensionTestsPath=${workspaceFolder}/editors/code/out/tests/unit" ],
+          "--extensionTestsPath=${workspaceFolder}/dist/test/" ],
       "sourceMaps": true,
-      "outFiles": [ "${workspaceFolder}/editors/code/out/tests/unit/**/*.js" ],
+      "outFiles": [ "${workspaceFolder}/dist/test/**/*.js" ],
       "preLaunchTask": "Pretest"
     },
     {
