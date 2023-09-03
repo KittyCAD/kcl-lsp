@@ -6,10 +6,8 @@ on:
   workflow_dispatch:
 
   push:
-    branches:
-      - release
-      - trigger-nightly
-
+    tags:
+      - v*
 env:
   CARGO_INCREMENTAL: 0
   CARGO_NET_RETRY: 10
@@ -150,11 +148,9 @@ jobs:
       - run: npm ci
 
       - name: Package Extension (release)
-        if: github.ref == 'refs/heads/release'
         run: npx vsce package -o "./out/kcl-language-server-alpine-x64.vsix" --target alpine-x64
 
       - name: Package Extension (nightly)
-        if: github.ref != 'refs/heads/release'
         run: npx vsce package -o "./out/kcl-language-server-alpine-x64.vsix" --target alpine-x64 --pre-release
 
       - run: rm -rf editors/code/server
@@ -175,10 +171,8 @@ jobs:
         with:
           node-version: 16
 
-      - run: echo "TAG=$(date --iso -u)" >> $GITHUB_ENV
-        if: github.ref == 'refs/heads/release'
+            #- run: echo "TAG=$(date --iso -u)" >> $GITHUB_ENV
       - run: echo "TAG=nightly" >> $GITHUB_ENV
-        if: github.ref != 'refs/heads/release'
       - run: 'echo "TAG: $TAG"'
 
       - name: Checkout repository
@@ -239,21 +233,17 @@ jobs:
       - run: npm ci
 
       - name: Publish Extension (Code Marketplace, release)
-        if: github.ref == 'refs/heads/release'
         # token from https://dev.azure.com/kcl-language-server/
         run: npx vsce publish --pat ${{ secrets.VSCE_PAT }} --packagePath ./out/kcl-language-server-*.vsix
 
       - name: Publish Extension (OpenVSX, release)
-        if: github.ref == 'refs/heads/release'
         run: npx ovsx publish --pat ${{ secrets.OPENVSX_TOKEN }} --packagePath ./out/kcl-language-server-*.vsix
         timeout-minutes: 2
 
       - name: Publish Extension (Code Marketplace, nightly)
-        if: github.ref != 'refs/heads/release'
         run: npx vsce publish --pat ${{ secrets.VSCE_PAT }} --packagePath ./out/kcl-language-server-*.vsix --pre-release
 
       - name: Publish Extension (OpenVSX, nightly)
-        if: github.ref != 'refs/heads/release'
         run: npx ovsx publish --pat ${{ secrets.OPENVSX_TOKEN }} --packagePath ./out/kcl-language-server-*.vsix
         timeout-minutes: 2
 
