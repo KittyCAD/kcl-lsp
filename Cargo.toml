@@ -2,7 +2,7 @@
 name = "kcl-language-server"
 description = "A language server for KCL."
 authors = ["KittyCAD Inc <kcl@kittycad.io>"]
-version = "0.0.0"
+version = "0.1.0"
 edition = "2021"
 license = "MIT"
 
@@ -43,10 +43,6 @@ members = [
 # Disabling debug info speeds up builds a bunch,
 # and we don't rely on it for debugging that much.
 debug = 0
-
-[profile.dev.package]
-# This speeds up `cargo release build`.
-miniz_oxide.opt-level = 3
 
 [profile.release]
 incremental = true

@@ -12,10 +12,6 @@ use time::OffsetDateTime;
 use xshell::{cmd, Shell};
 use zip::{write::FileOptions, DateTime, ZipWriter};
 
-const VERSION_STABLE: &str = "0.3";
-const VERSION_NIGHTLY: &str = "0.4";
-const VERSION_DEV: &str = "0.5"; // keep this one in sync with `package.json`
-
 /// A subcommand for building and packaging a release.
 #[derive(Parser, Clone, Debug)]
 pub struct Build {
@@ -38,28 +34,44 @@ impl Build {
         sh.remove_path(&build)?;
         sh.create_dir(&build)?;
 
-        if let Some(patch_version) = &self.client_patch_version {
-            let version = if stable {
-                format!("{VERSION_STABLE}.{patch_version}")
-            } else {
-                // A hack to make VS Code prefer nightly over stable.
-                format!("{VERSION_NIGHTLY}.{patch_version}")
-            };
-            build_server(sh, &format!("{version}-standalone"), &target)?;
-            let release_tag = if stable {
-                // We already checked above if the env var contains "refs/tags/v".
-                // So this is safe to unwrap.
-                sh.var("GITHUB_REF")
-                    .unwrap_or_default()
-                    .replace("refs/tags/", "")
-                    .to_string()
-            } else {
-                "nightly".to_string()
-            };
-            build_client(sh, &version, &release_tag, &target)?;
-        } else {
-            build_server(sh, "0.0.0-standalone", &target)?;
+        // Read the version from our root Cargo.toml.
+        let version = sh.read_file("Cargo.toml")?;
+        let mut version = version
+            .lines()
+            .find(|line| line.starts_with("version = "))
+            .unwrap_or_default()
+            .replace("version = ", "")
+            .replace("\"", "")
+            .replace("'", "")
+            .trim()
+            .to_string();
+
+        if !stable {
+            version = format!("{}-nightly", version);
         }
+
+        let release_tag = if stable {
+            // We already checked above if the env var contains "refs/tags/v".
+            // So this is safe to unwrap.
+            sh.var("GITHUB_REF")
+                .unwrap_or_default()
+                .replace("refs/tags/", "")
+                .to_string()
+        } else {
+            "nightly".to_string()
+        };
+
+        if stable && !release_tag.contains(&version) {
+            // bail early if the tag doesn't match the version
+            anyhow::bail!(
+                "Tag {} doesn't match version {}. Did you forget to update Cargo.toml?",
+                release_tag,
+                version
+            );
+        }
+
+        build_server(sh, &version, &target)?;
+        build_client(sh, &version, &release_tag, &target)?;
         Ok(())
     }
 }
@@ -74,13 +86,8 @@ fn build_client(sh: &Shell, version: &str, release_tag: &str, target: &Target) -
 
     let mut patch = Patch::new(sh, "./package.json")?;
     patch
-        .replace(
-            &format!(r#""version": "{VERSION_DEV}.0-dev""#),
-            &format!(r#""version": "{version}""#),
-        )
+        .replace(&format!(r#""version": "0.0.0""#), &format!(r#""version": "{version}""#))
         .replace(r#""releaseTag": null"#, &format!(r#""releaseTag": "{release_tag}""#))
-        .replace(r#""$generated-start": {},"#, "")
-        .replace(",\n                \"$generated-end\": {}", "")
         .replace(r#""enabledApiProposals": [],"#, r#""#);
     patch.commit(sh)?;
 
