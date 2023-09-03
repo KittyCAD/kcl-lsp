@@ -6,7 +6,7 @@
     {
       "label": "Build Extension in Background",
       "group": "build",
-      "type": "yarn",
+      "type": "npm",
       "script": "watch",
       "path": "",
       "problemMatcher": {
@@ -18,7 +18,7 @@
     {
       "label": "Build Extension",
       "group": "build",
-      "type": "yarn",
+      "type": "npm",
       "script": "build",
       "path": "",
       "problemMatcher": {
@@ -44,7 +44,7 @@
       "label": "Pretest",
       "group": "build",
       "isBackground": false,
-      "type": "yarn",
+      "type": "npm",
       "script": "pretest",
       "path": "",
       "problemMatcher": {

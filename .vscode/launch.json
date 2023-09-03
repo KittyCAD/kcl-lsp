@@ -18,7 +18,7 @@
       "args": [
         // "--user-data-dir=${workspaceFolder}/target/code",
         "--disable-extensions",
-        "--extensionDevelopmentPath=${workspaceFolder}/client/src"
+        "--extensionDevelopmentPath=${workspaceFolder}"
       ],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Extension",
@@ -30,7 +30,7 @@
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
-      "args": ["--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/client/src"],
+      "args": ["--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Server and Extension",
       "skipFiles": ["<node_internals>/**/*.js"],
@@ -44,7 +44,7 @@
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
-      "args": ["--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/client/src"],
+      "args": ["--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Server (Release) and Extension",
       "skipFiles": ["<node_internals>/**/*.js"],
@@ -62,7 +62,7 @@
       "args": [
         "--disable-extension",
         "kittycad.kcl-language-server",
-        "--extensionDevelopmentPath=${workspaceFolder}/client/src"
+        "--extensionDevelopmentPath=${workspaceFolder}"
       ],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Server (Release) and Extension",
@@ -92,7 +92,7 @@
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "args": [
-        "--extensionDevelopmentPath=${workspaceFolder}/client/src",
+        "--extensionDevelopmentPath=${workspaceFolder}",
         "--extensionTestsPath=${workspaceFolder}/dist/client/src/test/"
       ],
       "sourceMaps": true,
