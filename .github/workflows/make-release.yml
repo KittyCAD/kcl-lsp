@@ -103,7 +103,7 @@ jobs:
         run: npx vsce package -o "./build/kcl-language-server-${{ matrix.code-target }}.vsix" --target ${{ matrix.code-target }}
 
       - name: Package Extension (nightly)
-        if: !startsWith(github.event.ref, 'refs/tags/v')
+        if: startsWith(github.event.ref, 'refs/heads/main')
         run: npx vsce package -o "./build/kcl-language-server-${{ matrix.code-target }}.vsix" --target ${{ matrix.code-target }} --pre-release
 
       - if: matrix.target == 'x86_64-unknown-linux-gnu'
@@ -113,7 +113,7 @@ jobs:
       - if: matrix.target == 'x86_64-unknown-linux-gnu' && startsWith(github.event.ref, 'refs/tags/v')
         run: npx vsce package -o ./build/kcl-language-server-no-server.vsix
 
-      - if: matrix.target == 'x86_64-unknown-linux-gnu' && !startsWith(github.event.ref, 'refs/tags/v')
+      - if: matrix.target == 'x86_64-unknown-linux-gnu' && startsWith(github.event.ref, 'refs/heads/main')
         run: npx vsce package -o ./build/kcl-language-server-no-server.vsix --pre-release
 
       - name: Upload artifacts
@@ -122,8 +122,8 @@ jobs:
           name: release-${{ matrix.target }}
           path: ./build
 
-  out-x86_64-unknown-linux-musl:
-    name: out (x86_64-unknown-linux-musl)
+  release-x86_64-unknown-linux-musl:
+    name: build (x86_64-unknown-linux-musl)
     runs-on: ubuntu-latest
     env:
       RA_TARGET: x86_64-unknown-linux-musl
@@ -153,7 +153,7 @@ jobs:
         run: npx vsce package -o "./build/kcl-language-server-alpine-x64.vsix" --target alpine-x64
 
       - name: Package Extension (nightly)
-        if: !startsWith(github.event.ref, 'refs/tags/v')
+        if: startsWith(github.event.ref, 'refs/heads/main')
         run: npx vsce package -o "./build/kcl-language-server-alpine-x64.vsix" --target alpine-x64 --pre-release
 
       - run: rm -rf editors/code/server
@@ -179,7 +179,7 @@ jobs:
         if: startsWith(github.event.ref, 'refs/tags/v')
 
       - run: echo "TAG=nightly" >> $GITHUB_ENV
-        if: !startsWith(github.event.ref, 'refs/tags/v')
+        if: startsWith(github.event.ref, 'refs/heads/main')
 
       - run: 'echo "TAG: $TAG"'
 
@@ -251,10 +251,10 @@ jobs:
         timeout-minutes: 2
 
       - name: Publish Extension (Code Marketplace, nightly)
-        if: !startsWith(github.event.ref, 'refs/tags/v')
+        if: startsWith(github.event.ref, 'refs/heads/main')
         run: npx vsce publish --pat ${{ secrets.VSCE_PAT }} --packagePath ./build/kcl-language-server-*.vsix --pre-release
 
       - name: Publish Extension (OpenVSX, nightly)
-        if: !startsWith(github.event.ref, 'refs/tags/v')
+        if: startsWith(github.event.ref, 'refs/heads/main')
         run: npx ovsx publish --pat ${{ secrets.OPENVSX_TOKEN }} --packagePath ./build/kcl-language-server-*.vsix
         timeout-minutes: 2
