@@ -241,7 +241,7 @@ jobs:
       - name: Publish Extension (Code Marketplace, release)
         if: github.ref == 'refs/heads/release'
         # token from https://dev.azure.com/kcl-language-server/
-        run: npx vsce publish --pat ${{ secrets.MARKETPLACE_TOKEN }} --packagePath ./out/kcl-language-server-*.vsix
+        run: npx vsce publish --pat ${{ secrets.VSCE_PAT }} --packagePath ./out/kcl-language-server-*.vsix
 
       - name: Publish Extension (OpenVSX, release)
         if: github.ref == 'refs/heads/release'
@@ -250,7 +250,7 @@ jobs:
 
       - name: Publish Extension (Code Marketplace, nightly)
         if: github.ref != 'refs/heads/release'
-        run: npx vsce publish --pat ${{ secrets.MARKETPLACE_TOKEN }} --packagePath ./out/kcl-language-server-*.vsix --pre-release
+        run: npx vsce publish --pat ${{ secrets.VSCE_PAT }} --packagePath ./out/kcl-language-server-*.vsix --pre-release
 
       - name: Publish Extension (OpenVSX, nightly)
         if: github.ref != 'refs/heads/release'
