@@ -86,7 +86,7 @@
     "@vscode/vsce": "^2.21.0",
     "cross-env": "^7.0.2",
     "electron-rebuild": "^1.11.0",
-    "esbuild": "^0.15.10",
+    "esbuild": "^0.19.2",
     "eslint": "^7.6.0",
     "eslint-config-react-app": "^7.0.1",
     "glob": "^7.1.7",
