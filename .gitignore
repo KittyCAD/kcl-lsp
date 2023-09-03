@@ -1,5 +1,6 @@
-/target
+target
 node_modules
 yarn-error.log
 dist
 .vscode-test
+build
