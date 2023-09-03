@@ -96,8 +96,25 @@
         "command": "kcl-language-server.stopServer",
         "title": "Stop server",
         "category": "kcl-language-server"
+      },
+      {
+        "command": "kcl-language-server.serverVersion",
+        "title": "Show server version",
+        "category": "kcl-language-server"
       }
-    ]
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "kcl-language-server.restartServer",
+          "when": "inKclProject"
+        },
+        {
+          "command": "kcl-language-server.serverVersion",
+          "when": "inKclProject"
+        }
+      ]
+    }
   },
   "scripts": {
     "postinstall": "cd client && yarn install",

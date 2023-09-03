@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import * as lc from 'vscode-languageclient/node'
 
+import * as commands from './commands'
 import { type CommandFactory, Ctx, fetchWorkspace } from './ctx'
 import { setContextValue } from './util'
 
@@ -63,5 +64,6 @@ function createCommands(): Record<string, CommandFactory> {
       },
       disabled: (_) => async () => {},
     },
+    serverVersion: { enabled: commands.serverVersion },
   }
 }
