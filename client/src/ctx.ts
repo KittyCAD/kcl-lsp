@@ -1,12 +1,9 @@
 import * as vscode from 'vscode'
 import type * as lc from 'vscode-languageclient/node'
-import * as path from 'path'
 
 import { Config, prepareVSCodeConfig } from './config'
 import { createClient } from './client'
 import {
-  executeDiscoverProject,
-  isDocumentInWorkspace,
   isKclDocument,
   isKclEditor,
   LazyOutputChannel,
@@ -16,7 +13,6 @@ import {
 import type { ServerStatusParams } from './lsp_ext'
 import { PersistentState } from './persistent_state'
 import { bootstrap } from './bootstrap'
-import type { ExecOptions } from 'child_process'
 import { TransportKind } from 'vscode-languageclient/node'
 
 // We only support local folders, not eg. Live Share (`vlsl:` scheme), so don't activate if
@@ -198,7 +194,7 @@ export class Ctx {
       }
 
       const initializationOptions = prepareVSCodeConfig(
-        rawInitializationOptions,
+        rawInitializationOptions
       )
 
       this._client = await createClient(

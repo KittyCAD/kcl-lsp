@@ -1,7 +1,7 @@
 import * as lc from 'vscode-languageclient/node'
 import * as vscode from 'vscode'
 import * as ra from './lsp_ext'
-import { type Config, prepareVSCodeConfig } from './config'
+import { type Config } from './config'
 
 // Command URIs have about form of command:command-name?arguments, where
 // arguments is a percent-encoded array of data we want to pass along to
