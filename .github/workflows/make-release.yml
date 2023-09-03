@@ -162,7 +162,7 @@ jobs:
 
     steps:
       - name: Install dependencies
-        run: apk add --no-cache git clang lld musl-dev nodejs yarn
+        run: apk add --no-cache git clang lld musl-dev nodejs yarn npm
 
       - name: Checkout repository
         uses: actions/checkout@v3
