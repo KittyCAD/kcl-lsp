@@ -123,6 +123,8 @@ jobs:
       - name: build
         run: cargo release build --client-patch-version ${{ github.run_number }}
 
+      - run: yarn install
+
       - name: Package Extension (release)
         if: startsWith(github.event.ref, 'refs/tags/v')
         run: npx vsce package -o "./build/kcl-language-server-${{ matrix.code-target }}.vsix" --target ${{ matrix.code-target }}
@@ -160,7 +162,7 @@ jobs:
 
     steps:
       - name: Install dependencies
-        run: apk add --no-cache git clang lld musl-dev nodejs
+        run: apk add --no-cache git clang lld musl-dev nodejs yarn
 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -169,6 +171,8 @@ jobs:
 
       - name: build
         run: cargo release build --client-patch-version ${{ github.run_number }}
+
+      - run: yarn install
 
       - name: Package Extension (release)
         if: startsWith(github.event.ref, 'refs/tags/v')
