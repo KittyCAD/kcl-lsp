@@ -18,7 +18,7 @@
       "args": [
         // "--user-data-dir=${workspaceFolder}/target/code",
         "--disable-extensions",
-        "--extensionDevelopmentPath=${workspaceFolder}/src"
+        "--extensionDevelopmentPath=${workspaceFolder}/client/src"
       ],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Extension",
@@ -30,7 +30,7 @@
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
-      "args": ["--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/src"],
+      "args": ["--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/client/src"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Server and Extension",
       "skipFiles": ["<node_internals>/**/*.js"],
@@ -44,7 +44,7 @@
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
-      "args": ["--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/src"],
+      "args": ["--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/client/src"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Server (Release) and Extension",
       "skipFiles": ["<node_internals>/**/*.js"],
@@ -62,7 +62,7 @@
       "args": [
         "--disable-extension",
         "kittycad.kcl-language-server",
-        "--extensionDevelopmentPath=${workspaceFolder}/src"
+        "--extensionDevelopmentPath=${workspaceFolder}/client/src"
       ],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Server (Release) and Extension",
@@ -92,11 +92,11 @@
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "args": [
-        "--extensionDevelopmentPath=${workspaceFolder}/src",
-        "--extensionTestsPath=${workspaceFolder}/dist/test/"
+        "--extensionDevelopmentPath=${workspaceFolder}/client/src",
+        "--extensionTestsPath=${workspaceFolder}/dist/client/src/test/"
       ],
       "sourceMaps": true,
-      "outFiles": ["${workspaceFolder}/dist/test/**/*.js"],
+      "outFiles": ["${workspaceFolder}/dist/client/src/test/**/*.js"],
       "preLaunchTask": "Pretest"
     },
     {

@@ -130,7 +130,7 @@
     "lint:fix": "yarn run lint -- --fix",
     "typecheck": "tsc",
     "pretest": "yarn run typecheck && yarn run build && yarn run lint",
-    "test": "node ./dist/test/runTest.js",
+    "test": "node ./dist/client/src/test/runTest.js",
     "package": "vsce package -o kcl-language-server.vsix"
   },
   "devDependencies": {
