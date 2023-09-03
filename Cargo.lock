@@ -935,9 +935,9 @@ dependencies = [
 
 [[package]]
 name = "kcl-lib"
-version = "0.1.12"
+version = "0.1.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2206144c6550fb4f51e46925737db83f43937c7a01f349ba93656becb0d07ad0"
+checksum = "24b4ed55c97b748f60446666595166ff685db4d2c456e8b7ae806622a9f8efc0"
 dependencies = [
  "anyhow",
  "bson",
