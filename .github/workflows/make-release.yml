@@ -133,9 +133,6 @@ jobs:
         if: startsWith(github.event.ref, 'refs/heads/main')
         run: npx vsce package -o "./build/kcl-language-server-${{ matrix.code-target }}.vsix" --target ${{ matrix.code-target }} --pre-release
 
-      - if: matrix.target == 'x86_64-unknown-linux-gnu'
-        run: rm -rf editors/code/server
-
       - if: matrix.target == 'x86_64-unknown-linux-gnu' && startsWith(github.event.ref, 'refs/tags/v')
         run: npx vsce package -o ./build/kcl-language-server-no-server.vsix
 
@@ -181,8 +178,6 @@ jobs:
       - name: Package Extension (nightly)
         if: startsWith(github.event.ref, 'refs/heads/main')
         run: npx vsce package -o "./build/kcl-language-server-alpine-x64.vsix" --target alpine-x64 --pre-release
-
-      - run: rm -rf editors/code/server
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
