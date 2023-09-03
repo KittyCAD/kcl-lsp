@@ -123,8 +123,6 @@ jobs:
       - name: build
         run: cargo release build --client-patch-version ${{ github.run_number }}
 
-      - run: npm ci
-
       - name: Package Extension (release)
         if: startsWith(github.event.ref, 'refs/tags/v')
         run: npx vsce package -o "./build/kcl-language-server-${{ matrix.code-target }}.vsix" --target ${{ matrix.code-target }}
