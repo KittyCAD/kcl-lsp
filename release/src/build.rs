@@ -113,7 +113,7 @@ fn build_server(sh: &Shell, release: &str, target: &Target) -> anyhow::Result<()
     )
     .run()?;
 
-    let dst = Path::new("release").join(&target.artifact_name);
+    let dst = Path::new("build").join(&target.artifact_name);
     gzip(&target.server_path, &dst.with_extension("gz"))?;
     if target_name.contains("-windows-") {
         zip(

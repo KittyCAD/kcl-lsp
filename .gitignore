@@ -5,3 +5,4 @@ dist
 .vscode-test
 build
 releases
+client/server
