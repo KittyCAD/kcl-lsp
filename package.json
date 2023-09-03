@@ -6,7 +6,11 @@
   "categories": [],
   "keywords": [
     "language-server",
-    "tower-lsp"
+    "kittycad",
+    "kcl",
+    "hardware",
+    "cad",
+    "manufacturing"
   ],
   "repository": {
     "url": "https://github.com/kittycad/kcl-language-server"
