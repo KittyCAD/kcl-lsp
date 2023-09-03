@@ -1,15 +1,15 @@
-name: 'wasmtime github releases'
-description: 'wasmtime github releases'
+name: "wasmtime github releases"
+description: "wasmtime github releases"
 inputs:
   token:
-    description: ''
+    description: ""
     required: true
   name:
-    description: ''
+    description: ""
     required: true
   files:
-    description: ''
+    description: ""
     required: true
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "docker"
+  image: "Dockerfile"

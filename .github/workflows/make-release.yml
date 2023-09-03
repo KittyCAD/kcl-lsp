@@ -105,7 +105,8 @@ jobs:
         run: npx vsce package -o "./out/kcl-language-server-${{ matrix.code-target }}.vsix" --target ${{ matrix.code-target }} --pre-release
 
       - if: matrix.target == 'x86_64-unknown-linux-gnu'
-        run: rm -rf editors/code/server
+        run:
+          rm -rf editors/code/server
 
           #- if: matrix.target == 'x86_64-unknown-linux-gnu'
           #run: npx vsce package -o ./out/kcl-language-server-no-server.vsix
@@ -167,7 +168,8 @@ jobs:
       - name: Install Nodejs
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version:
+            16
 
             #- run: echo "TAG=$(date --iso -u)" >> $GITHUB_ENV
       - run: echo "TAG=nightly" >> $GITHUB_ENV
@@ -244,4 +246,3 @@ jobs:
       - name: Publish Extension (OpenVSX, nightly)
         run: npx ovsx publish --pat ${{ secrets.OPENVSX_TOKEN }} --packagePath ./out/kcl-language-server-*.vsix
         timeout-minutes: 2
-
