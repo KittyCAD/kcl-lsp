@@ -173,7 +173,6 @@ export class Ctx {
         this.outputChannel,
         initializationOptions,
         serverOptions,
-        this.config,
       );
     }
     return this._client;
@@ -329,10 +328,6 @@ export class Ctx {
 
   pushExtCleanup(d: Disposable) {
     this.extCtx.subscriptions.push(d);
-  }
-
-  private pushClientCleanup(d: Disposable) {
-    this.clientSubscriptions.push(d);
   }
 }
 

@@ -1,7 +1,6 @@
 import * as lc from "vscode-languageclient/node";
 import type * as vscode from "vscode";
 import type * as ra from "./lsp_ext";
-import type { Config } from "./config";
 
 // Command URIs have about form of command:command-name?arguments, where
 // arguments is a percent-encoded array of data we want to pass along to
@@ -40,7 +39,6 @@ export async function createClient(
   outputChannel: vscode.OutputChannel,
   initializationOptions: vscode.WorkspaceConfiguration,
   serverOptions: lc.ServerOptions,
-  config: Config,
 ): Promise<lc.LanguageClient> {
   const clientOptions: lc.LanguageClientOptions = {
     documentSelector: [{ scheme: "file", language: "kcl" }],
