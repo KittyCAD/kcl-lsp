@@ -20,13 +20,9 @@
         "--disable-extensions",
         "--extensionDevelopmentPath=${workspaceFolder}/src"
       ],
-      "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
-      ],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Extension",
-      "skipFiles": [
-        "<node_internals>/**/*.js"
-      ]
+      "skipFiles": ["<node_internals>/**/*.js"]
     },
     {
       // Used for testing the extension with a local build of the LSP server (in `target/debug`).
@@ -38,13 +34,9 @@
         "--disable-extensions",
         "--extensionDevelopmentPath=${workspaceFolder}/src"
       ],
-      "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
-      ],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Server and Extension",
-      "skipFiles": [
-        "<node_internals>/**/*.js"
-      ],
+      "skipFiles": ["<node_internals>/**/*.js"],
       "env": {
         "__KCL_LSP_SERVER_DEBUG": "${workspaceFolder}/target/debug/kcl-language-server"
       }
@@ -59,13 +51,9 @@
         "--disable-extensions",
         "--extensionDevelopmentPath=${workspaceFolder}/src"
       ],
-      "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
-      ],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Server (Release) and Extension",
-      "skipFiles": [
-        "<node_internals>/**/*.js"
-      ],
+      "skipFiles": ["<node_internals>/**/*.js"],
       "env": {
         "__RA_LSP_SERVER_DEBUG": "${workspaceFolder}/target/release/kcl-language-server"
       }
@@ -78,16 +66,13 @@
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "args": [
-        "--disable-extension", "kittycad.kcl-language-server",
+        "--disable-extension",
+        "kittycad.kcl-language-server",
         "--extensionDevelopmentPath=${workspaceFolder}/src"
       ],
-      "outFiles": [
-        "${workspaceFolder}/dist/**/*.js"
-      ],
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Server (Release) and Extension",
-      "skipFiles": [
-        "<node_internals>/**/*.js"
-      ],
+      "skipFiles": ["<node_internals>/**/*.js"],
       "env": {
         "__RA_LSP_SERVER_DEBUG": "${workspaceFolder}/target/release/kcl-language-server"
       }
@@ -105,9 +90,7 @@
       "request": "attach",
       "program": "${workspaceFolder}/target/debug/kcl-language-server",
       "pid": "${command:pickMyProcess}",
-      "sourceLanguages": [
-        "rust"
-      ]
+      "sourceLanguages": ["rust"]
     },
     {
       "name": "Run Unit Tests",
@@ -115,16 +98,17 @@
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "args": [
-          "--extensionDevelopmentPath=${workspaceFolder}/src",
-          "--extensionTestsPath=${workspaceFolder}/dist/test/" ],
+        "--extensionDevelopmentPath=${workspaceFolder}/src",
+        "--extensionTestsPath=${workspaceFolder}/dist/test/"
+      ],
       "sourceMaps": true,
-      "outFiles": [ "${workspaceFolder}/dist/test/**/*.js" ],
+      "outFiles": ["${workspaceFolder}/dist/test/**/*.js"],
       "preLaunchTask": "Pretest"
     },
     {
       "name": "Win Attach to Server",
       "type": "cppvsdbg",
-      "processId":"${command:pickProcess}",
+      "processId": "${command:pickProcess}",
       "request": "attach"
     }
   ]

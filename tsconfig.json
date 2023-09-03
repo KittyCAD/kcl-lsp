@@ -1,20 +1,20 @@
 {
-	"compilerOptions": {
-		"module": "commonjs",
-		"target": "es2019",
-		"lib": ["ES2019"],
-		"outDir": "out",
-		"rootDir": "src",
-		"sourceMap": true
-	},
-	"include": [
-		"src"
-	],
-	"exclude": [
-		"node_modules",
-		".vscode-test"
-	],
-	"references": [
-		{ "path": "./client" },
-	]
+  "extends": "@tsconfig/strictest/tsconfig.json",
+  "compilerOptions": {
+    "esModuleInterop": false,
+    "module": "commonjs",
+    "moduleResolution": "node16",
+    "target": "es2021",
+    "outDir": "dist",
+    "lib": ["es2021"],
+    "sourceMap": true,
+    "rootDir": ".",
+    "newLine": "LF",
+
+    // FIXME: https://github.com/rust-lang/rust-analyzer/issues/15253
+    "exactOptionalPropertyTypes": false
+  },
+  "exclude": ["node_modules", ".vscode-test"],
+  "include": ["src", "tests"],
+  "references": [{ "path": "./client" }]
 }

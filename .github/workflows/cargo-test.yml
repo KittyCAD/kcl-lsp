@@ -26,9 +26,9 @@ jobs:
       - name: Install latest rust
         uses: actions-rs/toolchain@v1
         with:
-            toolchain: stable
-            override: true
-            components: rustfmt, clippy
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
       - uses: taiki-e/install-action@cargo-llvm-cov
       - uses: taiki-e/install-action@nextest
 

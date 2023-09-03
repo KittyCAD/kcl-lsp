@@ -5,3 +5,6 @@ coverage
 # Ignore Rust projects:
 *.rs
 target
+
+out
+dist

@@ -13,7 +13,7 @@
         "base": "$tsc-watch",
         "fileLocation": ["relative", "${workspaceFolder}/"]
       },
-      "isBackground": true,
+      "isBackground": true
     },
     {
       "label": "Build Extension",
@@ -24,7 +24,7 @@
       "problemMatcher": {
         "base": "$tsc",
         "fileLocation": ["relative", "${workspaceFolder}/"]
-      },
+      }
     },
     {
       "label": "Build Server",

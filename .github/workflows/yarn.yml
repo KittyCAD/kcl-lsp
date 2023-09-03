@@ -27,4 +27,4 @@ jobs:
         with:
           node-version: 18
       - run: yarn install
-      - run: yarn fmt-check
+      - run: yarn fmt:check
