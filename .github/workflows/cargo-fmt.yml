@@ -36,5 +36,5 @@ jobs:
 
       - name: Run cargo fmt
         run: |
-          cargo fmt -- --check
+          cargo fmt --all -- --check
         shell: bash
