@@ -16,6 +16,7 @@ export async function deactivate() {
 }
 
 export async function activate(context: vscode.ExtensionContext): Promise<KclAnalyzerExtensionApi> {
+  vscode.window.showInformationMessage("KCL Language Server is now activating!");
   const ctx = new Ctx(context, createCommands(), fetchWorkspace());
   // VS Code doesn't show a notification when an extension fails to activate
   // so we do it ourselves.
