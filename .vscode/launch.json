@@ -30,10 +30,7 @@
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
-      "args": [
-        "--disable-extensions",
-        "--extensionDevelopmentPath=${workspaceFolder}/src"
-      ],
+      "args": ["--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/src"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Server and Extension",
       "skipFiles": ["<node_internals>/**/*.js"],
@@ -47,10 +44,7 @@
       "type": "extensionHost",
       "request": "launch",
       "runtimeExecutable": "${execPath}",
-      "args": [
-        "--disable-extensions",
-        "--extensionDevelopmentPath=${workspaceFolder}/src"
-      ],
+      "args": ["--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/src"],
       "outFiles": ["${workspaceFolder}/dist/**/*.js"],
       "preLaunchTask": "Build Server (Release) and Extension",
       "skipFiles": ["<node_internals>/**/*.js"],

@@ -1,4 +1,4 @@
-import * as lc from 'vscode-languageclient';
+import * as lc from "vscode-languageclient";
 
 export type CommandLink = {
   /**
@@ -14,10 +14,10 @@ export type CommandLinkGroup = {
 // experimental extensions
 
 export const serverStatus = new lc.NotificationType<ServerStatusParams>(
-  'experimental/serverStatus'
+  "experimental/serverStatus",
 );
 export type ServerStatusParams = {
-  health: 'ok' | 'warning' | 'error';
+  health: "ok" | "warning" | "error";
   quiescent: boolean;
   message?: string;
 };

@@ -1,7 +1,7 @@
-import * as lc from 'vscode-languageclient/node';
-import type * as vscode from 'vscode';
-import type * as ra from './lsp_ext';
-import type { Config } from './config';
+import * as lc from "vscode-languageclient/node";
+import type * as vscode from "vscode";
+import type * as ra from "./lsp_ext";
+import type { Config } from "./config";
 
 // Command URIs have about form of command:command-name?arguments, where
 // arguments is a percent-encoded array of data we want to pass along to
@@ -32,7 +32,7 @@ setInterval(
       LINKED_COMMANDS.delete(key);
     }
   },
-  10 * 60 * 1000
+  10 * 60 * 1000,
 );
 
 export async function createClient(
@@ -40,10 +40,10 @@ export async function createClient(
   outputChannel: vscode.OutputChannel,
   initializationOptions: vscode.WorkspaceConfiguration,
   serverOptions: lc.ServerOptions,
-  config: Config
+  config: Config,
 ): Promise<lc.LanguageClient> {
   const clientOptions: lc.LanguageClientOptions = {
-    documentSelector: [{ scheme: 'file', language: 'kcl' }],
+    documentSelector: [{ scheme: "file", language: "kcl" }],
     initializationOptions,
     traceOutputChannel,
     outputChannel,
@@ -60,7 +60,7 @@ export async function createClient(
         async configuration(
           params: lc.ConfigurationParams,
           token: vscode.CancellationToken,
-          next: lc.ConfigurationRequest.HandlerSignature
+          next: lc.ConfigurationRequest.HandlerSignature,
         ) {
           const resp = await next(params, token);
           return resp;
@@ -70,10 +70,10 @@ export async function createClient(
   };
 
   const client = new lc.LanguageClient(
-    'kcl-language-server',
-    'KittyCAD Language Server',
+    "kcl-language-server",
+    "KittyCAD Language Server",
     serverOptions,
-    clientOptions
+    clientOptions,
   );
 
   client.registerFeature(new ExperimentalFeatures());
@@ -83,7 +83,7 @@ export async function createClient(
 
 class ExperimentalFeatures implements lc.StaticFeature {
   getState(): lc.FeatureState {
-    return { kind: 'static' };
+    return { kind: "static" };
   }
   fillClientCapabilities(capabilities: lc.ClientCapabilities): void {
     capabilities.experimental = {
@@ -94,14 +94,14 @@ class ExperimentalFeatures implements lc.StaticFeature {
       colorDiagnosticOutput: true,
       openServerLogs: true,
       commands: {
-        commands: ['editor.action.triggerParameterHints'],
+        commands: ["editor.action.triggerParameterHints"],
       },
       ...capabilities.experimental,
     };
   }
   initialize(
     _capabilities: lc.ServerCapabilities,
-    _documentSelector: lc.DocumentSelector | undefined
+    _documentSelector: lc.DocumentSelector | undefined,
   ): void {}
   dispose(): void {}
 }

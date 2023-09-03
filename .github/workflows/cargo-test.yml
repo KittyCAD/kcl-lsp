@@ -3,13 +3,13 @@ on:
     branches:
       - main
     paths:
-      - '**.rs'
+      - "**.rs"
       - Cargo.toml
       - Cargo.lock
       - .github/workflows/cargo-test.yml
   pull_request:
     paths:
-      - '**.rs'
+      - "**.rs"
       - Cargo.toml
       - Cargo.lock
       - .github/workflows/cargo-test.yml

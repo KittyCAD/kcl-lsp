@@ -1,16 +1,13 @@
-import * as vscode from 'vscode';
-import { strict as nativeAssert } from 'assert';
-import { exec, type ExecOptions, spawnSync } from 'child_process';
-import { inspect } from 'util';
+import * as vscode from "vscode";
+import { strict as nativeAssert } from "assert";
+import { exec, type ExecOptions, spawnSync } from "child_process";
+import { inspect } from "util";
 
 export interface Env {
   [name: string]: string;
 }
 
-export function assert(
-  condition: boolean,
-  explanation: string
-): asserts condition {
+export function assert(condition: boolean, explanation: string): asserts condition {
   try {
     nativeAssert(condition, explanation);
   } catch (err) {
@@ -21,9 +18,7 @@ export function assert(
 
 export const log = new (class {
   private enabled = true;
-  private readonly output = vscode.window.createOutputChannel(
-    'KittyCAD Language Client'
-  );
+  private readonly output = vscode.window.createOutputChannel("KittyCAD Language Client");
 
   setEnabled(yes: boolean): void {
     log.enabled = yes;
@@ -32,32 +27,32 @@ export const log = new (class {
   // Hint: the type [T, ...T[]] means a non-empty array
   debug(...msg: [unknown, ...unknown[]]): void {
     if (!log.enabled) return;
-    log.write('DEBUG', ...msg);
+    log.write("DEBUG", ...msg);
   }
 
   info(...msg: [unknown, ...unknown[]]): void {
-    log.write('INFO', ...msg);
+    log.write("INFO", ...msg);
   }
 
   warn(...msg: [unknown, ...unknown[]]): void {
     debugger;
-    log.write('WARN', ...msg);
+    log.write("WARN", ...msg);
   }
 
   error(...msg: [unknown, ...unknown[]]): void {
     debugger;
-    log.write('ERROR', ...msg);
+    log.write("ERROR", ...msg);
     log.output.show(true);
   }
 
   private write(label: string, ...messageParts: unknown[]): void {
-    const message = messageParts.map(log.stringify).join(' ');
+    const message = messageParts.map(log.stringify).join(" ");
     const dateTime = new Date().toLocaleString();
     log.output.appendLine(`${label} [${dateTime}]: ${message}`);
   }
 
   private stringify(val: unknown): string {
-    if (typeof val === 'string') return val;
+    if (typeof val === "string") return val;
     return inspect(val, {
       colors: false,
       depth: 6, // heuristic
@@ -69,26 +64,20 @@ export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export type KclDocument = vscode.TextDocument & { languageId: 'kcl' };
+export type KclDocument = vscode.TextDocument & { languageId: "kcl" };
 export type KclEditor = vscode.TextEditor & { document: KclDocument };
 
-export function isKclDocument(
-  document: vscode.TextDocument
-): document is KclDocument {
+export function isKclDocument(document: vscode.TextDocument): document is KclDocument {
   // Prevent corrupted text (particularly via inlay hints) in diff views
   // by allowing only `file` schemes
   // unfortunately extensions that use diff views not always set this
   // to something different than 'file' (see ongoing bug: #4608)
-  return document.languageId === 'kcl' && document.uri.scheme === 'file';
+  return document.languageId === "kcl" && document.uri.scheme === "file";
 }
 
-export function isCargoTomlDocument(
-  document: vscode.TextDocument
-): document is KclDocument {
+export function isCargoTomlDocument(document: vscode.TextDocument): document is KclDocument {
   // ideally `document.languageId` should be 'toml' but user maybe not have toml extension installed
-  return (
-    document.uri.scheme === 'file' && document.fileName.endsWith('Cargo.toml')
-  );
+  return document.uri.scheme === "file" && document.fileName.endsWith("Cargo.toml");
 }
 
 export function isKclEditor(editor: vscode.TextEditor): editor is KclEditor {
@@ -109,22 +98,22 @@ export function isDocumentInWorkspace(document: KclDocument): boolean {
 }
 
 export function isValidExecutable(path: string): boolean {
-  log.debug('Checking availability of a binary at', path);
+  log.debug("Checking availability of a binary at", path);
 
-  const res = spawnSync(path, ['--version'], {
-    encoding: 'utf8',
+  const res = spawnSync(path, ["--version"], {
+    encoding: "utf8",
     env: { ...process.env },
   });
 
   const printOutput = res.error ? log.warn : log.info;
-  printOutput(path, '--version:', res);
+  printOutput(path, "--version:", res);
 
   return res.status === 0;
 }
 
 /** Sets ['when'](https://code.visualstudio.com/docs/getstarted/keybindings#_when-clause-contexts) clause contexts */
 export function setContextValue(key: string, value: any): Thenable<void> {
-  return vscode.commands.executeCommand('setContext', key, value);
+  return vscode.commands.executeCommand("setContext", key, value);
 }
 
 /**
@@ -132,7 +121,7 @@ export function setContextValue(key: string, value: any): Thenable<void> {
  * underlying async function.
  */
 export function memoizeAsync<Ret, TThis, Param extends string>(
-  func: (this: TThis, arg: Param) => Promise<Ret>
+  func: (this: TThis, arg: Param) => Promise<Ret>,
 ) {
   const cache = new Map<string, Ret>();
 
@@ -148,10 +137,7 @@ export function memoizeAsync<Ret, TThis, Param extends string>(
 }
 
 /** Awaitable wrapper around `child_process.exec` */
-export function execute(
-  command: string,
-  options: ExecOptions
-): Promise<string> {
+export function execute(command: string, options: ExecOptions): Promise<string> {
   log.info(`running command: ${command}`);
   return new Promise((resolve, reject) => {
     exec(command, options, (err, stdout, stderr) => {
@@ -171,10 +157,7 @@ export function execute(
   });
 }
 
-export function executeDiscoverProject(
-  command: string,
-  options: ExecOptions
-): Promise<string> {
+export function executeDiscoverProject(command: string, options: ExecOptions): Promise<string> {
   options = Object.assign({ maxBuffer: 10 * 1024 * 1024 }, options);
   log.info(`running command: ${command}`);
   return new Promise((resolve, reject) => {

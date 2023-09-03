@@ -5,13 +5,13 @@ permissions:
 on:
   pull_request:
     paths:
-      - '**.rs'
-      - '**.rs.gen'
+      - "**.rs"
+      - "**.rs.gen"
       - Cargo.toml
       - Cargo.lock
-      - 'rust-toolchain'
-      - 'rust-toolchain.toml'
-      - 'Dockerfile'
+      - "rust-toolchain"
+      - "rust-toolchain.toml"
+      - "Dockerfile"
       - .github/workflows/docker-image.yml
   workflow_call:
   workflow_dispatch:

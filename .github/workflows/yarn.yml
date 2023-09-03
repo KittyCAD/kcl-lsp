@@ -3,15 +3,15 @@ on:
     branches:
       - main
     paths:
-      - '**.json'
-      - '**.js'
-      - '**.ts'
+      - "**.json"
+      - "**.js"
+      - "**.ts"
       - .github/workflows/yarn.yml
   pull_request:
     paths:
-      - '**.json'
-      - '**.js'
-      - '**.ts'
+      - "**.json"
+      - "**.js"
+      - "**.ts"
       - .github/workflows/yarn.yml
 permissions:
   packages: read

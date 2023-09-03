@@ -3,15 +3,15 @@ on:
     branches:
       - main
     paths:
-      - '**.rs'
-      - 'rust-toolchain'
-      - 'rust-toolchain.toml'
+      - "**.rs"
+      - "rust-toolchain"
+      - "rust-toolchain.toml"
       - .github/workflows/cargo-fmt.yml
   pull_request:
     paths:
-      - '**.rs'
-      - 'rust-toolchain'
-      - 'rust-toolchain.toml'
+      - "**.rs"
+      - "rust-toolchain"
+      - "rust-toolchain.toml"
       - .github/workflows/cargo-fmt.yml
 permissions:
   packages: read

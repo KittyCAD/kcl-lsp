@@ -6,10 +6,7 @@ function isNotUndefined<T>(input: Undefinable<T>): input is NotUndefined<T> {
   return input !== undefined;
 }
 
-export function expectNotUndefined<T>(
-  input: Undefinable<T>,
-  msg: string
-): NotUndefined<T> {
+export function expectNotUndefined<T>(input: Undefinable<T>, msg: string): NotUndefined<T> {
   if (isNotUndefined(input)) {
     return input;
   }

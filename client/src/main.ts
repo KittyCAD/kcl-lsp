@@ -1,11 +1,11 @@
-import * as vscode from 'vscode';
-import type * as lc from 'vscode-languageclient/node';
+import * as vscode from "vscode";
+import type * as lc from "vscode-languageclient/node";
 
-import * as commands from './commands';
-import { type CommandFactory, Ctx, fetchWorkspace } from './ctx';
-import { setContextValue } from './util';
+import * as commands from "./commands";
+import { type CommandFactory, Ctx, fetchWorkspace } from "./ctx";
+import { setContextValue } from "./util";
 
-const KCL_PROJECT_CONTEXT_NAME = 'inKclProject';
+const KCL_PROJECT_CONTEXT_NAME = "inKclProject";
 
 export interface KclAnalyzerExtensionApi {
   readonly client?: lc.LanguageClient;
@@ -15,15 +15,13 @@ export async function deactivate() {
   await setContextValue(KCL_PROJECT_CONTEXT_NAME, undefined);
 }
 
-export async function activate(
-  context: vscode.ExtensionContext
-): Promise<KclAnalyzerExtensionApi> {
+export async function activate(context: vscode.ExtensionContext): Promise<KclAnalyzerExtensionApi> {
   const ctx = new Ctx(context, createCommands(), fetchWorkspace());
   // VS Code doesn't show a notification when an extension fails to activate
   // so we do it ourselves.
   const api = await activateServer(ctx).catch((err) => {
     void vscode.window.showErrorMessage(
-      `Cannot activate kcl-language-server extension: ${err.message}`
+      `Cannot activate kcl-language-server extension: ${err.message}`,
     );
     throw err;
   });
@@ -59,7 +57,7 @@ function createCommands(): Record<string, CommandFactory> {
         // FIXME: We should re-use the client, that is ctx.deactivate() if none of the configs have changed
         await ctx.stopAndDispose();
         ctx.setServerStatus({
-          health: 'stopped',
+          health: "stopped",
         });
       },
       disabled: (_) => async () => {},

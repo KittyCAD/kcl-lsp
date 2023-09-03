@@ -1,32 +1,25 @@
-import * as Is from 'vscode-languageclient/lib/common/utils/is';
-import * as os from 'os';
-import * as path from 'path';
-import * as vscode from 'vscode';
-import { log, type Env } from './util';
-import { expectNotUndefined, unwrapUndefinable } from './undefinable';
+import * as Is from "vscode-languageclient/lib/common/utils/is";
+import * as os from "os";
+import * as path from "path";
+import * as vscode from "vscode";
+import { log, type Env } from "./util";
+import { expectNotUndefined, unwrapUndefinable } from "./undefinable";
 
 export type RunnableEnvCfgItem = {
   mask?: string;
   env: Record<string, string>;
   platform?: string | string[];
 };
-export type RunnableEnvCfg =
-  | undefined
-  | Record<string, string>
-  | RunnableEnvCfgItem[];
+export type RunnableEnvCfg = undefined | Record<string, string> | RunnableEnvCfgItem[];
 
 export class Config {
-  readonly extensionId = 'kittycad.kcl-language-server';
+  readonly extensionId = "kittycad.kcl-language-server";
   configureLang: vscode.Disposable | undefined;
 
-  readonly rootSection = 'kcl-language-server';
-  private readonly requiresReloadOpts = [
-    'cargo',
-    'procMacro',
-    'serverPath',
-    'server',
-    'files',
-  ].map((opt) => `${this.rootSection}.${opt}`);
+  readonly rootSection = "kcl-language-server";
+  private readonly requiresReloadOpts = ["cargo", "procMacro", "serverPath", "server", "files"].map(
+    (opt) => `${this.rootSection}.${opt}`,
+  );
 
   readonly package: {
     version: string;
@@ -41,7 +34,7 @@ export class Config {
     vscode.workspace.onDidChangeConfiguration(
       this.onDidChangeConfiguration,
       this,
-      ctx.subscriptions
+      ctx.subscriptions,
     );
     this.refreshLogging();
   }
@@ -52,33 +45,26 @@ export class Config {
 
   private refreshLogging() {
     log.setEnabled(this.traceExtension ?? false);
-    log.info('Extension version:', this.package.version);
+    log.info("Extension version:", this.package.version);
 
-    const cfg = Object.entries(this.cfg).filter(
-      ([_, val]) => !(val instanceof Function)
-    );
-    log.info('Using configuration', Object.fromEntries(cfg));
+    const cfg = Object.entries(this.cfg).filter(([_, val]) => !(val instanceof Function));
+    log.info("Using configuration", Object.fromEntries(cfg));
   }
 
-  private async onDidChangeConfiguration(
-    event: vscode.ConfigurationChangeEvent
-  ) {
+  private async onDidChangeConfiguration(event: vscode.ConfigurationChangeEvent) {
     this.refreshLogging();
 
     const requiresReloadOpt = this.requiresReloadOpts.find((opt) =>
-      event.affectsConfiguration(opt)
+      event.affectsConfiguration(opt),
     );
 
     if (!requiresReloadOpt) return;
 
     const message = `Changing "${requiresReloadOpt}" requires a server restart`;
-    const userResponse = await vscode.window.showInformationMessage(
-      message,
-      'Restart now'
-    );
+    const userResponse = await vscode.window.showInformationMessage(message, "Restart now");
 
     if (userResponse) {
-      const command = 'kcl-language-server.restartServer';
+      const command = "kcl-language-server.restartServer";
       await vscode.commands.executeCommand(command);
     }
   }
@@ -111,14 +97,11 @@ export class Config {
   }
 
   get serverPath() {
-    return (
-      this.get<null | string>('server.path') ??
-      this.get<null | string>('serverPath')
-    );
+    return this.get<null | string>("server.path") ?? this.get<null | string>("serverPath");
   }
 
   get traceExtension() {
-    return this.get<boolean>('trace.extension');
+    return this.get<boolean>("trace.extension");
   }
 }
 
@@ -132,7 +115,7 @@ export class Config {
 // to interact with.
 export function prepareVSCodeConfig<T>(
   resp: T,
-  cb?: (key: Extract<keyof T, string>, res: { [key: string]: any }) => void
+  cb?: (key: Extract<keyof T, string>, res: { [key: string]: any }) => void,
 ): T {
   if (Is.string(resp)) {
     return substituteVSCodeVariableInString(resp) as T;
@@ -140,7 +123,7 @@ export function prepareVSCodeConfig<T>(
     return resp.map((val) => {
       return prepareVSCodeConfig(val);
     }) as T;
-  } else if (resp && typeof resp === 'object') {
+  } else if (resp && typeof resp === "object") {
     const res: { [key: string]: any } = {};
     for (const key in resp) {
       const val = resp[key];
@@ -166,7 +149,7 @@ export function substituteVariablesInEnv(env: Env): Env {
       const depRe = new RegExp(/\${(?<depName>.+?)}/g);
       let match = undefined;
       while ((match = depRe.exec(value))) {
-        const depName = unwrapUndefinable(match.groups?.['depName']);
+        const depName = unwrapUndefinable(match.groups?.["depName"]);
         deps.add(depName);
         // `depName` at this point can have a form of `expression` or
         // `prefix:expression`
@@ -175,7 +158,7 @@ export function substituteVariablesInEnv(env: Env): Env {
         }
       }
       return [`env:${key}`, { deps: [...deps], value }];
-    })
+    }),
   );
 
   const resolved = new Set<string>();
@@ -183,10 +166,10 @@ export function substituteVariablesInEnv(env: Env): Env {
     const match = /(?<prefix>.*?):(?<body>.+)/.exec(dep);
     if (match) {
       const { prefix, body } = match.groups!;
-      if (prefix === 'env') {
+      if (prefix === "env") {
         const envName = unwrapUndefinable(body);
         envWithDeps[dep] = {
-          value: process.env[envName] ?? '',
+          value: process.env[envName] ?? "",
           deps: [],
         };
         resolved.add(dep);
@@ -194,14 +177,14 @@ export function substituteVariablesInEnv(env: Env): Env {
         // we can't handle other prefixes at the moment
         // leave values as is, but still mark them as resolved
         envWithDeps[dep] = {
-          value: '${' + dep + '}',
+          value: "${" + dep + "}",
           deps: [],
         };
         resolved.add(dep);
       }
     } else {
       envWithDeps[dep] = {
-        value: computeVscodeVar(dep) || '${' + dep + '}',
+        value: computeVscodeVar(dep) || "${" + dep + "}",
         deps: [],
       };
     }
@@ -214,13 +197,10 @@ export function substituteVariablesInEnv(env: Env): Env {
     for (const key of toResolve) {
       const item = unwrapUndefinable(envWithDeps[key]);
       if (item.deps.every((dep) => resolved.has(dep))) {
-        item.value = item.value.replace(
-          /\${(?<depName>.+?)}/g,
-          (_wholeMatch, depName) => {
-            const item = unwrapUndefinable(envWithDeps[depName]);
-            return item.value;
-          }
-        );
+        item.value = item.value.replace(/\${(?<depName>.+?)}/g, (_wholeMatch, depName) => {
+          const item = unwrapUndefinable(envWithDeps[depName]);
+          return item.value;
+        });
         resolved.add(key);
         toResolve.delete(key);
       }
@@ -254,7 +234,7 @@ function computeVscodeVar(varName: string): string | null {
     const fsPath: string =
       folder === undefined
         ? // no workspace opened
-          ''
+          ""
         : // could use currently opened document to detect the correct
           // workspace. However, that would be determined by the document
           // user has opened on Editor startup. Could lead to
@@ -278,7 +258,7 @@ function computeVscodeVar(varName: string): string | null {
     // https://github.com/microsoft/vscode/blob/08ac1bb67ca2459496b272d8f4a908757f24f56f/src/vs/workbench/api/common/extHostVariableResolverService.ts#L81
     // or
     // https://github.com/microsoft/vscode/blob/29eb316bb9f154b7870eb5204ec7f2e7cf649bec/src/vs/server/node/remoteTerminalChannel.ts#L56
-    execPath: () => process.env['VSCODE_EXEC_PATH'] ?? process.execPath,
+    execPath: () => process.env["VSCODE_EXEC_PATH"] ?? process.execPath,
 
     pathSeparator: () => path.sep,
   };
@@ -286,7 +266,7 @@ function computeVscodeVar(varName: string): string | null {
   if (varName in supportedVariables) {
     const fn = expectNotUndefined(
       supportedVariables[varName],
-      `${varName} should not be undefined here`
+      `${varName} should not be undefined here`,
     );
     return fn();
   } else {
