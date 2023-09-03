@@ -18,7 +18,7 @@
       "args": [
         // "--user-data-dir=${workspaceFolder}/target/code",
         "--disable-extensions",
-        "--extensionDevelopmentPath=${workspaceFolder}/editors/code"
+        "--extensionDevelopmentPath=${workspaceFolder}/src"
       ],
       "outFiles": [
         "${workspaceFolder}/dist/**/*.js"
@@ -36,7 +36,7 @@
       "runtimeExecutable": "${execPath}",
       "args": [
         "--disable-extensions",
-        "--extensionDevelopmentPath=${workspaceFolder}/editors/code"
+        "--extensionDevelopmentPath=${workspaceFolder}/src"
       ],
       "outFiles": [
         "${workspaceFolder}/dist/**/*.js"
@@ -57,7 +57,7 @@
       "runtimeExecutable": "${execPath}",
       "args": [
         "--disable-extensions",
-        "--extensionDevelopmentPath=${workspaceFolder}/editors/code"
+        "--extensionDevelopmentPath=${workspaceFolder}/src"
       ],
       "outFiles": [
         "${workspaceFolder}/dist/**/*.js"
@@ -79,7 +79,7 @@
       "runtimeExecutable": "${execPath}",
       "args": [
         "--disable-extension", "kittycad.kcl-language-server",
-        "--extensionDevelopmentPath=${workspaceFolder}/editors/code"
+        "--extensionDevelopmentPath=${workspaceFolder}/src"
       ],
       "outFiles": [
         "${workspaceFolder}/dist/**/*.js"
@@ -115,7 +115,7 @@
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "args": [
-          "--extensionDevelopmentPath=${workspaceFolder}/editors/code",
+          "--extensionDevelopmentPath=${workspaceFolder}/src",
           "--extensionTestsPath=${workspaceFolder}/dist/test/" ],
       "sourceMaps": true,
       "outFiles": [ "${workspaceFolder}/dist/test/**/*.js" ],
