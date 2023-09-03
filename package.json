@@ -1,9 +1,13 @@
 {
   "name": "kcl-language-server",
-  "description": "KCL language server",
+  "displayName": "KittyCAD Language Server",
+  "description": "KittyCAD language support for Visual Studio Code",
+  "private": true,
+  "icon": "icon.png",
+  "publisher": "kittycad",
+  "homepage": "https://kittycad.io",
   "license": "MIT",
   "version": "0.1.0",
-  "categories": [],
   "keywords": [
     "language-server",
     "kittycad",
@@ -12,8 +16,12 @@
     "cad",
     "manufacturing"
   ],
+  "categories": [
+    "Programming Languages"
+  ],
   "repository": {
-    "url": "https://github.com/kittycad/kcl-language-server"
+    "url": "https://github.com/kittycad/kcl-lsp.git",
+    "type": "git"
   },
   "engines": {
     "vscode": "^1.66.0"
@@ -36,6 +44,15 @@
       "type": "object",
       "title": "kcl-language-server",
       "properties": {
+        "kcl-language-server.server.path": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "scope": "machine-overridable",
+          "default": null,
+          "markdownDescription": "Path to kcl-language-server executable (points to bundled binary by default)."
+        },
         "kcl-language-server.trace.server": {
           "type": "string",
           "scope": "window",
@@ -50,7 +67,12 @@
             "Full log"
           ],
           "default": "off",
-          "description": "Traces the communication between VS Code and the language server."
+          "description": "Trace requests to the kcl-language-server (this is usually overly verbose and not recommended for regular users)."
+        },
+        "kcl-language-server.trace.extension": {
+          "description": "Enable logging of VS Code extensions itself.",
+          "type": "boolean",
+          "default": false
         }
       }
     },
@@ -58,7 +80,24 @@
       "[kcl]": {
         "editor.semanticHighlighting.enabled": true
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "kcl-language-server.restartServer",
+        "title": "Restart server",
+        "category": "kcl-language-server"
+      },
+      {
+        "command": "kcl-language-server.startServer",
+        "title": "Start server",
+        "category": "kcl-language-server"
+      },
+      {
+        "command": "kcl-language-server.stopServer",
+        "title": "Stop server",
+        "category": "kcl-language-server"
+      }
+    ]
   },
   "scripts": {
     "postinstall": "cd client && yarn install",
