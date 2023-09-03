@@ -177,7 +177,7 @@ impl Target {
                 } else if cfg!(target_os = "windows") {
                     "x86_64-pc-windows-msvc".to_string()
                 } else if cfg!(target_os = "macos") {
-                    "x86_64-apple-darwin".to_string()
+                    "aarch64-apple-darwin".to_string()
                 } else {
                     panic!("Unsupported OS, maybe try setting RA_TARGET")
                 }
