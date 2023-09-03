@@ -14,6 +14,9 @@ adding this line  to your `settings.json`:
 }
 ```
 
+We automatically set this up as the default for the plugin so this should work
+out of the box.
+
 ### Development
 
 ```bash
