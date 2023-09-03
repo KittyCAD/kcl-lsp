@@ -13,6 +13,9 @@ on:
       - '**.js'
       - '**.ts'
       - .github/workflows/vscode.yml
+  release:
+    types:
+    - created
 name: vscode
 jobs:
   build:
@@ -33,4 +36,9 @@ jobs:
       if: runner.os == 'Linux'
     - run: yarn test
       if: runner.os != 'Linux'
+    - name: Publish
+      if: success() && startsWith(github.ref, 'refs/tags/') && matrix.os == 'ubuntu-latest'
+      run: npm run deploy
+      env:
+        VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
