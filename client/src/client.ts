@@ -1,7 +1,7 @@
-import * as lc from 'vscode-languageclient/node'
-import * as vscode from 'vscode'
-import * as ra from './lsp_ext'
-import { type Config } from './config'
+import * as lc from 'vscode-languageclient/node';
+import type * as vscode from 'vscode';
+import type * as ra from './lsp_ext';
+import type { Config } from './config';
 
 // Command URIs have about form of command:command-name?arguments, where
 // arguments is a percent-encoded array of data we want to pass along to
@@ -12,7 +12,7 @@ import { type Config } from './config'
 // we render a command link, a reference to a command with all its arguments
 // is stored in a map, and instead a linkToCommand link is rendered
 // with the key to that map.
-export const LINKED_COMMANDS = new Map<string, ra.CommandLink>()
+export const LINKED_COMMANDS = new Map<string, ra.CommandLink>();
 
 // For now the map is cleaned up periodically (I've set it to every
 // 10 minutes). In general case we'll probably need to introduce TTLs or
@@ -26,14 +26,14 @@ setInterval(
   function cleanupOlderCommandLinks() {
     // keys are returned in insertion order, we'll keep a few
     // of recent keys available, and clean the rest
-    const keys = [...LINKED_COMMANDS.keys()]
-    const keysToRemove = keys.slice(0, keys.length - 10)
+    const keys = [...LINKED_COMMANDS.keys()];
+    const keysToRemove = keys.slice(0, keys.length - 10);
     for (const key of keysToRemove) {
-      LINKED_COMMANDS.delete(key)
+      LINKED_COMMANDS.delete(key);
     }
   },
   10 * 60 * 1000
-)
+);
 
 export async function createClient(
   traceOutputChannel: vscode.OutputChannel,
@@ -54,7 +54,7 @@ export async function createClient(
         // attempt to restart the client for no reason
         async didChangeWatchedFile(event, next) {
           if (client.isRunning()) {
-            await next(event)
+            await next(event);
           }
         },
         async configuration(
@@ -62,28 +62,28 @@ export async function createClient(
           token: vscode.CancellationToken,
           next: lc.ConfigurationRequest.HandlerSignature
         ) {
-          const resp = await next(params, token)
-          return resp
+          const resp = await next(params, token);
+          return resp;
         },
       },
     },
-  }
+  };
 
   const client = new lc.LanguageClient(
     'kcl-language-server',
     'KittyCAD Language Server',
     serverOptions,
     clientOptions
-  )
+  );
 
-  client.registerFeature(new ExperimentalFeatures())
+  client.registerFeature(new ExperimentalFeatures());
 
-  return client
+  return client;
 }
 
 class ExperimentalFeatures implements lc.StaticFeature {
   getState(): lc.FeatureState {
-    return { kind: 'static' }
+    return { kind: 'static' };
   }
   fillClientCapabilities(capabilities: lc.ClientCapabilities): void {
     capabilities.experimental = {
@@ -97,7 +97,7 @@ class ExperimentalFeatures implements lc.StaticFeature {
         commands: ['editor.action.triggerParameterHints'],
       },
       ...capabilities.experimental,
-    }
+    };
   }
   initialize(
     _capabilities: lc.ServerCapabilities,

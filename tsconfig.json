@@ -15,6 +15,5 @@
     "exactOptionalPropertyTypes": false
   },
   "exclude": ["node_modules", ".vscode-test"],
-  "include": ["src", "tests"],
-  "references": [{ "path": "./client" }]
+  "include": ["client"]
 }

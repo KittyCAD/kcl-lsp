@@ -1,85 +1,85 @@
-import * as Is from 'vscode-languageclient/lib/common/utils/is'
-import * as os from 'os'
-import * as path from 'path'
-import * as vscode from 'vscode'
-import { log, Env } from './util'
-import { expectNotUndefined, unwrapUndefinable } from './undefinable'
+import * as Is from 'vscode-languageclient/lib/common/utils/is';
+import * as os from 'os';
+import * as path from 'path';
+import * as vscode from 'vscode';
+import { log, type Env } from './util';
+import { expectNotUndefined, unwrapUndefinable } from './undefinable';
 
 export type RunnableEnvCfgItem = {
-  mask?: string
-  env: Record<string, string>
-  platform?: string | string[]
-}
+  mask?: string;
+  env: Record<string, string>;
+  platform?: string | string[];
+};
 export type RunnableEnvCfg =
   | undefined
   | Record<string, string>
-  | RunnableEnvCfgItem[]
+  | RunnableEnvCfgItem[];
 
 export class Config {
-  readonly extensionId = 'kittycad.kcl-language-server'
-  configureLang: vscode.Disposable | undefined
+  readonly extensionId = 'kittycad.kcl-language-server';
+  configureLang: vscode.Disposable | undefined;
 
-  readonly rootSection = 'kcl-language-server'
+  readonly rootSection = 'kcl-language-server';
   private readonly requiresReloadOpts = [
     'cargo',
     'procMacro',
     'serverPath',
     'server',
     'files',
-  ].map((opt) => `${this.rootSection}.${opt}`)
+  ].map((opt) => `${this.rootSection}.${opt}`);
 
   readonly package: {
-    version: string
-    releaseTag: string | null
-    enableProposedApi: boolean | undefined
-  } = vscode.extensions.getExtension(this.extensionId)!.packageJSON
+    version: string;
+    releaseTag: string | null;
+    enableProposedApi: boolean | undefined;
+  } = vscode.extensions.getExtension(this.extensionId)!.packageJSON;
 
-  readonly globalStorageUri: vscode.Uri
+  readonly globalStorageUri: vscode.Uri;
 
   constructor(ctx: vscode.ExtensionContext) {
-    this.globalStorageUri = ctx.globalStorageUri
+    this.globalStorageUri = ctx.globalStorageUri;
     vscode.workspace.onDidChangeConfiguration(
       this.onDidChangeConfiguration,
       this,
       ctx.subscriptions
-    )
-    this.refreshLogging()
+    );
+    this.refreshLogging();
   }
 
   dispose() {
-    this.configureLang?.dispose()
+    this.configureLang?.dispose();
   }
 
   private refreshLogging() {
-    log.setEnabled(this.traceExtension ?? false)
-    log.info('Extension version:', this.package.version)
+    log.setEnabled(this.traceExtension ?? false);
+    log.info('Extension version:', this.package.version);
 
     const cfg = Object.entries(this.cfg).filter(
       ([_, val]) => !(val instanceof Function)
-    )
-    log.info('Using configuration', Object.fromEntries(cfg))
+    );
+    log.info('Using configuration', Object.fromEntries(cfg));
   }
 
   private async onDidChangeConfiguration(
     event: vscode.ConfigurationChangeEvent
   ) {
-    this.refreshLogging()
+    this.refreshLogging();
 
     const requiresReloadOpt = this.requiresReloadOpts.find((opt) =>
       event.affectsConfiguration(opt)
-    )
+    );
 
-    if (!requiresReloadOpt) return
+    if (!requiresReloadOpt) return;
 
-    const message = `Changing "${requiresReloadOpt}" requires a server restart`
+    const message = `Changing "${requiresReloadOpt}" requires a server restart`;
     const userResponse = await vscode.window.showInformationMessage(
       message,
       'Restart now'
-    )
+    );
 
     if (userResponse) {
-      const command = 'kcl-language-server.restartServer'
-      await vscode.commands.executeCommand(command)
+      const command = 'kcl-language-server.restartServer';
+      await vscode.commands.executeCommand(command);
     }
   }
 
@@ -87,7 +87,7 @@ export class Config {
   // https://stackoverflow.com/questions/60135780/what-is-the-best-way-to-type-check-the-configuration-for-vscode-extension
 
   private get cfg(): vscode.WorkspaceConfiguration {
-    return vscode.workspace.getConfiguration(this.rootSection)
+    return vscode.workspace.getConfiguration(this.rootSection);
   }
 
   /**
@@ -107,18 +107,18 @@ export class Config {
    * So this getter handles this quirk by not requiring the caller to use postfix `!`
    */
   private get<T>(path: string): T | undefined {
-    return prepareVSCodeConfig(this.cfg.get<T>(path))
+    return prepareVSCodeConfig(this.cfg.get<T>(path));
   }
 
   get serverPath() {
     return (
       this.get<null | string>('server.path') ??
       this.get<null | string>('serverPath')
-    )
+    );
   }
 
   get traceExtension() {
-    return this.get<boolean>('trace.extension')
+    return this.get<boolean>('trace.extension');
   }
 }
 
@@ -135,121 +135,121 @@ export function prepareVSCodeConfig<T>(
   cb?: (key: Extract<keyof T, string>, res: { [key: string]: any }) => void
 ): T {
   if (Is.string(resp)) {
-    return substituteVSCodeVariableInString(resp) as T
+    return substituteVSCodeVariableInString(resp) as T;
   } else if (resp && Is.array<any>(resp)) {
     return resp.map((val) => {
-      return prepareVSCodeConfig(val)
-    }) as T
+      return prepareVSCodeConfig(val);
+    }) as T;
   } else if (resp && typeof resp === 'object') {
-    const res: { [key: string]: any } = {}
+    const res: { [key: string]: any } = {};
     for (const key in resp) {
-      const val = resp[key]
-      res[key] = prepareVSCodeConfig(val)
+      const val = resp[key];
+      res[key] = prepareVSCodeConfig(val);
       if (cb) {
-        cb(key, res)
+        cb(key, res);
       }
     }
-    return res as T
+    return res as T;
   }
-  return resp
+  return resp;
 }
 
 // FIXME: Merge this with `substituteVSCodeVariables` above
 export function substituteVariablesInEnv(env: Env): Env {
-  const missingDeps = new Set<string>()
+  const missingDeps = new Set<string>();
   // vscode uses `env:ENV_NAME` for env vars resolution, and it's easier
   // to follow the same convention for our dependency tracking
-  const definedEnvKeys = new Set(Object.keys(env).map((key) => `env:${key}`))
+  const definedEnvKeys = new Set(Object.keys(env).map((key) => `env:${key}`));
   const envWithDeps = Object.fromEntries(
     Object.entries(env).map(([key, value]) => {
-      const deps = new Set<string>()
-      const depRe = new RegExp(/\${(?<depName>.+?)}/g)
-      let match = undefined
+      const deps = new Set<string>();
+      const depRe = new RegExp(/\${(?<depName>.+?)}/g);
+      let match = undefined;
       while ((match = depRe.exec(value))) {
-        const depName = unwrapUndefinable(match.groups?.['depName'])
-        deps.add(depName)
+        const depName = unwrapUndefinable(match.groups?.['depName']);
+        deps.add(depName);
         // `depName` at this point can have a form of `expression` or
         // `prefix:expression`
         if (!definedEnvKeys.has(depName)) {
-          missingDeps.add(depName)
+          missingDeps.add(depName);
         }
       }
-      return [`env:${key}`, { deps: [...deps], value }]
+      return [`env:${key}`, { deps: [...deps], value }];
     })
-  )
+  );
 
-  const resolved = new Set<string>()
+  const resolved = new Set<string>();
   for (const dep of missingDeps) {
-    const match = /(?<prefix>.*?):(?<body>.+)/.exec(dep)
+    const match = /(?<prefix>.*?):(?<body>.+)/.exec(dep);
     if (match) {
-      const { prefix, body } = match.groups!
+      const { prefix, body } = match.groups!;
       if (prefix === 'env') {
-        const envName = unwrapUndefinable(body)
+        const envName = unwrapUndefinable(body);
         envWithDeps[dep] = {
           value: process.env[envName] ?? '',
           deps: [],
-        }
-        resolved.add(dep)
+        };
+        resolved.add(dep);
       } else {
         // we can't handle other prefixes at the moment
         // leave values as is, but still mark them as resolved
         envWithDeps[dep] = {
           value: '${' + dep + '}',
           deps: [],
-        }
-        resolved.add(dep)
+        };
+        resolved.add(dep);
       }
     } else {
       envWithDeps[dep] = {
         value: computeVscodeVar(dep) || '${' + dep + '}',
         deps: [],
-      }
+      };
     }
   }
-  const toResolve = new Set(Object.keys(envWithDeps))
+  const toResolve = new Set(Object.keys(envWithDeps));
 
-  let leftToResolveSize
+  let leftToResolveSize;
   do {
-    leftToResolveSize = toResolve.size
+    leftToResolveSize = toResolve.size;
     for (const key of toResolve) {
-      const item = unwrapUndefinable(envWithDeps[key])
+      const item = unwrapUndefinable(envWithDeps[key]);
       if (item.deps.every((dep) => resolved.has(dep))) {
         item.value = item.value.replace(
           /\${(?<depName>.+?)}/g,
           (_wholeMatch, depName) => {
-            const item = unwrapUndefinable(envWithDeps[depName])
-            return item.value
+            const item = unwrapUndefinable(envWithDeps[depName]);
+            return item.value;
           }
-        )
-        resolved.add(key)
-        toResolve.delete(key)
+        );
+        resolved.add(key);
+        toResolve.delete(key);
       }
     }
-  } while (toResolve.size > 0 && toResolve.size < leftToResolveSize)
+  } while (toResolve.size > 0 && toResolve.size < leftToResolveSize);
 
-  const resolvedEnv: Env = {}
+  const resolvedEnv: Env = {};
   for (const key of Object.keys(env)) {
-    const item = unwrapUndefinable(envWithDeps[`env:${key}`])
-    resolvedEnv[key] = item.value
+    const item = unwrapUndefinable(envWithDeps[`env:${key}`]);
+    resolvedEnv[key] = item.value;
   }
-  return resolvedEnv
+  return resolvedEnv;
 }
 
-const VarRegex = new RegExp(/\$\{(.+?)\}/g)
+const VarRegex = new RegExp(/\$\{(.+?)\}/g);
 function substituteVSCodeVariableInString(val: string): string {
   return val.replace(VarRegex, (substring: string, varName) => {
     if (Is.string(varName)) {
-      return computeVscodeVar(varName) || substring
+      return computeVscodeVar(varName) || substring;
     } else {
-      return substring
+      return substring;
     }
-  })
+  });
 }
 
 function computeVscodeVar(varName: string): string | null {
   const workspaceFolder = () => {
-    const folders = vscode.workspace.workspaceFolders ?? []
-    const folder = folders[0]
+    const folders = vscode.workspace.workspaceFolders ?? [];
+    const folder = folders[0];
     // TODO: support for remote workspaces?
     const fsPath: string =
       folder === undefined
@@ -260,15 +260,15 @@ function computeVscodeVar(varName: string): string | null {
           // user has opened on Editor startup. Could lead to
           // unpredictable workspace selection in practice.
           // It's better to pick the first one
-          folder.uri.fsPath
-    return fsPath
-  }
+          folder.uri.fsPath;
+    return fsPath;
+  };
   // https://code.visualstudio.com/docs/editor/variables-reference
   const supportedVariables: { [k: string]: () => string } = {
     workspaceFolder,
 
     workspaceFolderBasename: () => {
-      return path.basename(workspaceFolder())
+      return path.basename(workspaceFolder());
     },
 
     cwd: () => process.cwd(),
@@ -281,16 +281,16 @@ function computeVscodeVar(varName: string): string | null {
     execPath: () => process.env['VSCODE_EXEC_PATH'] ?? process.execPath,
 
     pathSeparator: () => path.sep,
-  }
+  };
 
   if (varName in supportedVariables) {
     const fn = expectNotUndefined(
       supportedVariables[varName],
       `${varName} should not be undefined here`
-    )
-    return fn()
+    );
+    return fn();
   } else {
     // return "${" + varName + "}";
-    return null
+    return null;
   }
 }
