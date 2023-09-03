@@ -2,11 +2,15 @@
 name = "kcl-language-server"
 description = "A language server for KCL."
 authors = ["KittyCAD Inc <kcl@kittycad.io>"]
-version = "0.1.2"
+version = "0.0.0"
 edition = "2021"
 license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "kcl-language-server"
+path = "src/main.rs"
 
 [dependencies]
 anyhow = "1.0.75"
@@ -34,3 +38,13 @@ tower-lsp = { version = "0.20.0", default-features = false, features = ["runtime
 members = [
 	"release",
 ]
+
+[profile.dev]
+# Disabling debug info speeds up builds a bunch,
+# and we don't rely on it for debugging that much.
+debug = 0
+
+[profile.release]
+incremental = true
+# Set this to 1 or 2 to get more useful backtraces in debugger.
+debug = 0
