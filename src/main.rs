@@ -4,10 +4,6 @@
 
 use anyhow::{bail, Result};
 use clap::Parser;
-use signal_hook::{
-    consts::{SIGINT, SIGTERM},
-    iterator::Signals,
-};
 use slog::Drain;
 use tower_lsp::{LspService, Server as LspServer};
 use tracing_subscriber::{prelude::*, Layer};
@@ -156,22 +152,30 @@ async fn run_cmd(opts: &Opts) -> Result<()> {
                 semantic_tokens_map: Default::default(),
             });
 
-            // For Cloud run & ctrl+c, shutdown gracefully.
-            // "The main process inside the container will receive SIGTERM, and after a grace period,
-            // SIGKILL."
-            // Regsitering SIGKILL here will panic at runtime, so let's avoid that.
-            let mut signals = Signals::new([SIGINT, SIGTERM])?;
+            // TODO find a way to ctrl+c on windows.
+            #[cfg(not(target_os = "windows"))]
+            {
+                // For Cloud run & ctrl+c, shutdown gracefully.
+                // "The main process inside the container will receive SIGTERM, and after a grace period,
+                // SIGKILL."
+                // Regsitering SIGKILL here will panic at runtime, so let's avoid that.
+                use signal_hook::{
+                    consts::{SIGINT, SIGTERM},
+                    iterator::Signals,
+                };
+                let mut signals = Signals::new([SIGINT, SIGTERM])?;
 
-            tokio::spawn(async move {
-                for sig in signals.forever() {
-                    log::info!("received signal: {:?}", sig);
-                    log::info!("triggering cleanup...");
+                tokio::spawn(async move {
+                    for sig in signals.forever() {
+                        log::info!("received signal: {:?}", sig);
+                        log::info!("triggering cleanup...");
 
-                    // Exit the process.
-                    log::info!("all clean, exiting!");
-                    std::process::exit(0);
-                }
-            });
+                        // Exit the process.
+                        log::info!("all clean, exiting!");
+                        std::process::exit(0);
+                    }
+                });
+            }
 
             if s.stdio {
                 // Listen on stdin and stdout.
