@@ -3,6 +3,17 @@
 The `kcl` [Language Server Protocol](https://microsoft.github.io/language-server-protocol)
 implementation.
 
+### Syntax Highlighting
+
+Make sure your semantic token is enabled, you could enable your `semantic token` by
+adding this line  to your `settings.json`:
+
+```json
+{
+ "editor.semanticHighlighting.enabled": true,
+}
+```
+
 ### Development
 
 ```bash
@@ -16,3 +27,4 @@ $ cargo build
 > 
 > If encountered errors like `Cannot find module '/xxx/xxx/dist/extension.js'`
 > please try run command `tsc -b` manually
+
