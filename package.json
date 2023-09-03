@@ -30,7 +30,7 @@
   "activationEvents": [
     "onLanguage:kcl"
   ],
-  "main": "./dist/extension.js",
+  "main": "./dist/main.js",
   "contributes": {
     "languages": [
       {
@@ -103,7 +103,7 @@
     "postinstall": "cd client && yarn install",
     "vscode:prepublish": "yarn run esbuild-base -- --minify",
     "deploy": "vsce publish --yarn",
-    "esbuild-base": "esbuild ./client/src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild-base": "esbuild ./client/src/main.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
     "esbuild": "yarn run esbuild-base -- --sourcemap",
     "esbuild-watch": "yarn run esbuild-base -- --sourcemap --watch",
     "fmt": "prettier --write ./client",
