@@ -41,8 +41,7 @@ impl Build {
             .find(|line| line.starts_with("version = "))
             .unwrap_or_default()
             .replace("version = ", "")
-            .replace("\"", "")
-            .replace("'", "")
+            .replace(['\"', '\''], "")
             .trim()
             .to_string();
 
@@ -86,7 +85,7 @@ fn build_client(sh: &Shell, version: &str, release_tag: &str, target: &Target) -
 
     let mut patch = Patch::new(sh, "./package.json")?;
     patch
-        .replace(&format!(r#""version": "0.0.0""#), &format!(r#""version": "{version}""#))
+        .replace(r#""version": "0.0.0""#, &format!(r#""version": "{version}""#))
         .replace(r#""releaseTag": null"#, &format!(r#""releaseTag": "{release_tag}""#))
         .replace(r#""enabledApiProposals": [],"#, r#""#);
     patch.commit(sh)?;
