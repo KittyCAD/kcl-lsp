@@ -47,10 +47,12 @@ async function getServer(
 
   const ext = process.platform === "win32" ? ".exe" : "";
   const bundled = vscode.Uri.joinPath(context.extensionUri, "server", `kcl-language-server${ext}`);
+  log.info("Checking if bundled server exists at", bundled);
   const bundledExists = await vscode.workspace.fs.stat(bundled).then(
     () => true,
     () => false,
   );
+  log.info("Bundled server exists:", bundledExists);
   if (bundledExists) {
     let server = bundled;
     if (await isNixOs()) {
@@ -61,6 +63,11 @@ async function getServer(
         () => false,
       );
       if (exists && config.package.version !== state.serverVersion) {
+        log.info(
+          "Server version changed, removing old server binary",
+          config.package.version,
+          state.serverVersion,
+        );
         await vscode.workspace.fs.delete(dest);
         exists = false;
       }
@@ -70,6 +77,7 @@ async function getServer(
       }
       server = dest;
     }
+
     await state.updateServerVersion(config.package.version);
     return server.fsPath;
   }

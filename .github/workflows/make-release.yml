@@ -249,7 +249,8 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: release-i686-pc-windows-msvc
-          path: build
+          path:
+            build
             #- uses: actions/download-artifact@v1
             #with:
             #name: release-aarch64-pc-windows-msvc
