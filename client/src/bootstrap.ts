@@ -46,7 +46,7 @@ async function getServer(
   if (config.package.releaseTag === null) return "kcl-language-server";
 
   const ext = process.platform === "win32" ? ".exe" : "";
-  const bundled = vscode.Uri.joinPath(context.extensionUri, "server", `kcl-language-server${ext}`);
+  const bundled = vscode.Uri.joinPath(context.extensionUri,"client", "server", `kcl-language-server${ext}`);
   log.info("Checking if bundled server exists at", bundled);
   const bundledExists = await vscode.workspace.fs.stat(bundled).then(
     () => true,

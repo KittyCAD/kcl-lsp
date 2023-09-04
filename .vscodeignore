@@ -5,3 +5,16 @@ src/
 tsconfig.json
 webpack.config.js
 target
+client/src
+.cargo
+Cargo.*
+sample-code
+rust*
+release/
+build/
+Makefile
+Dockerfile
+.prettierignore
+.github
+.eslintignore
+.gitignore
