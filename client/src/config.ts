@@ -17,7 +17,7 @@ export class Config {
   configureLang: vscode.Disposable | undefined;
 
   readonly rootSection = "kcl-language-server";
-  private readonly requiresReloadOpts = ["cargo", "procMacro", "serverPath", "server", "files"].map(
+  private readonly requiresReloadOpts = ["serverPath", "server", "files"].map(
     (opt) => `${this.rootSection}.${opt}`,
   );
 
