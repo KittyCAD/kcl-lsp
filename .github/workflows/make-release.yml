@@ -197,14 +197,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: ["release", "release-x86_64-unknown-linux-musl"]
     steps:
-      - name: "Authenticate to Google Cloud"
-        uses: "google-github-actions/auth@v1.1.1"
-        with:
-          credentials_json: "${{ secrets.GOOGLE_CLOUD_DL_SA }}"
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1.1.1
-        with:
-          project_id: kittycadapi
       - name: Install Nodejs
         uses: actions/setup-node@v3
         with:
@@ -277,6 +269,14 @@ jobs:
           mkdir -p releases/language-server/${{ env.TAG }}
           cp -r build/* releases/language-server/${{ env.TAG }}
 
+      - name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1.1.1"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_CLOUD_DL_SA }}"
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1.1.1
+        with:
+          project_id: kittycadapi
       - name: "upload files to gcp"
         id: upload-files
         uses: google-github-actions/upload-cloud-storage@v1.0.3
