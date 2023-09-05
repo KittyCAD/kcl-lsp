@@ -3,6 +3,10 @@
 The `kcl` [Language Server Protocol](https://microsoft.github.io/language-server-protocol)
 implementation.
 
+## VSCode
+
+Install our extension: [KittyCAD Language Server](https://marketplace.visualstudio.com/items?itemName=KittyCAD.kcl-language-server)
+
 ### Syntax Highlighting
 
 Make sure your semantic token is enabled, you could enable your `semantic token` by
@@ -17,7 +21,7 @@ adding this line to your `settings.json`:
 We automatically set this up as the default for the plugin so this should work
 out of the box.
 
-### Development
+## Development
 
 ```bash
 $ yarn install
