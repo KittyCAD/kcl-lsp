@@ -21,6 +21,53 @@ adding this line to your `settings.json`:
 We automatically set this up as the default for the plugin so this should work
 out of the box.
 
+## Neovim
+
+You can add the following to your `vim` configuration if you are using `lspconfig`.
+
+This is [@jessfraz's
+setup](https://github.com/jessfraz/.vim/blob/master/vimrc#L935).
+
+```vim
+if executable('kcl-language-server')
+lua << EOF
+local lspconfig = require 'lspconfig'
+local configs = require 'lspconfig.configs'
+
+if not configs.kcl_lsp then
+  configs.kcl_lsp = {
+    default_config = {
+      cmd = {'kcl-language-server', 'server', '--stdio'},
+      filetypes = {'kcl'},
+      root_dir = lspconfig.util.root_pattern('.git'),
+    },
+    docs = {
+      description = [=[
+https://github.com/KittyCAD/kcl-lsp
+https://kittycad.io
+
+The KittyCAD Language Server Protocol implementation for the KCL language.
+
+To better detect kcl files, the following can be added:
+
+```
+vim.cmd [[ autocmd BufRead,BufNewFile *.kcl set filetype=kcl ]]
+```
+]=],
+      default_config = {
+        root_dir = [[root_pattern(".git")]],
+      },
+    }
+  }
+end
+
+lspconfig.kcl_lsp.setup{}
+EOF
+else
+  echo "You might want to install kcl-language-server: https://github.com/KittyCAD/kcl-lsp/releases"
+end
+```
+
 ## Development
 
 ```bash
