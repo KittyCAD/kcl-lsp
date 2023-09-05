@@ -47,6 +47,10 @@ function createCommands(): Record<string, CommandFactory> {
     startServer: {
       enabled: (ctx) => async () => {
         await ctx.start();
+        ctx.setServerStatus({
+          health: "ok",
+          quiescent: true,
+        });
       },
       disabled: (ctx) => async () => {
         await ctx.start();
