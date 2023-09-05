@@ -50,9 +50,9 @@ The KittyCAD Language Server Protocol implementation for the KCL language.
 
 To better detect kcl files, the following can be added:
 
-```
-vim.cmd [[ autocmd BufRead,BufNewFile *.kcl set filetype=kcl ]]
-```
+
+    vim.cmd [[ autocmd BufRead,BufNewFile *.kcl set filetype=kcl ]]
+
 ]=],
       default_config = {
         root_dir = [[root_pattern(".git")]],
