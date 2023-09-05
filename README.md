@@ -7,20 +7,6 @@ implementation.
 
 Install our extension: [KittyCAD Language Server](https://marketplace.visualstudio.com/items?itemName=KittyCAD.kcl-language-server)
 
-### Syntax Highlighting
-
-Make sure your semantic token is enabled, you could enable your `semantic token` by
-adding this line to your `settings.json`:
-
-```json
-{
-  "editor.semanticHighlighting.enabled": true
-}
-```
-
-We automatically set this up as the default for the plugin so this should work
-out of the box.
-
 ## Neovim
 
 You can add the following to your `vim` configuration if you are using `lspconfig`.
