@@ -216,7 +216,11 @@ export class Ctx {
   private async disposeClient() {
     this.clientSubscriptions?.forEach((disposable) => disposable.dispose());
     this.clientSubscriptions = [];
-    await this._client?.dispose();
+    try {
+      await this._client?.dispose(2000);
+    } catch (e) {
+      // DO nothing.
+    }
     this._serverPath = undefined;
     this._client = undefined;
   }

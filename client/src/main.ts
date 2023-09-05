@@ -54,6 +54,10 @@ function createCommands(): Record<string, CommandFactory> {
       },
       disabled: (ctx) => async () => {
         await ctx.start();
+        ctx.setServerStatus({
+          health: "ok",
+          quiescent: true,
+        });
       },
     },
     stopServer: {
