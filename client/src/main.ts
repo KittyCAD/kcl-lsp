@@ -63,5 +63,6 @@ function createCommands(): Record<string, CommandFactory> {
       disabled: (_) => async () => {},
     },
     serverVersion: { enabled: commands.serverVersion },
+    openLogs: { enabled: commands.openLogs },
   };
 }

@@ -17,3 +17,11 @@ export function serverVersion(ctx: CtxInit): Cmd {
     void vscode.window.showInformationMessage(`kcl-language-server version: ${versionString}`);
   };
 }
+
+export function openLogs(ctx: CtxInit): Cmd {
+  return async () => {
+    if (ctx.client.outputChannel) {
+      ctx.client.outputChannel.show();
+    }
+  };
+}

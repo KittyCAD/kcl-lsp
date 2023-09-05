@@ -185,6 +185,7 @@ export class Ctx {
       return;
     }
     await client.start();
+    this.setServerStatus({ health: "ok", quiescent: true });
     this.updateCommands();
   }
 
