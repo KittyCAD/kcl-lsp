@@ -3,6 +3,8 @@
 The `kcl` [Language Server Protocol](https://microsoft.github.io/language-server-protocol)
 implementation.
 
+This is just the server process. Most of the actual code for the server endpoints is in the same repo as the AST/tokenizer/parser since it's all relevant. That is [modeling-app](https://github.com/kittycad/modeling-app).
+
 ## VSCode
 
 Install our extension: [KittyCAD Language Server](https://marketplace.visualstudio.com/items?itemName=KittyCAD.kcl-language-server)
