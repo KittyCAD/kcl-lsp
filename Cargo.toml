@@ -2,7 +2,7 @@
 name = "kcl-language-server"
 description = "A language server for KCL."
 authors = ["KittyCAD Inc <kcl@kittycad.io>"]
-version = "0.1.11"
+version = "0.1.12"
 edition = "2021"
 license = "MIT"
 
