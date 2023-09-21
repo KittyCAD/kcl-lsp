@@ -14,10 +14,10 @@ path = "src/main.rs"
 
 [dependencies]
 anyhow = "1.0.75"
-clap = { version = "4.4.2", features = ["cargo", "derive", "env", "unicode"] }
+clap = { version = "4.4.4", features = ["cargo", "derive", "env", "unicode"] }
 dashmap = "5.5.3"
 kcl-lib = { version = "0.1.31", default-features = false, features = ["cli"] }
-#kcl-lib = { path = "../modeling-app/src/wasm-lib/kcl", default-features = false }
+#kcl-lib = { path = "../modeling-app/src/wasm-lib/kcl", default-features = false, features = ["cli"] }
 lazy_static = "1.4.0"
 log = { version = "0.4.20", features = ["serde"] }
 slog = "2.7.0"
