@@ -137,7 +137,7 @@ async fn run_cmd(opts: &Opts) -> Result<()> {
             let stdlib_signatures = kcl_lib::server::get_signatures_from_stdlib(&stdlib)?;
             // We can unwrap here because we know the tokeniser is valid, since
             // we have a test for it.
-            let token_types = kcl_lib::tokeniser::TokenType::to_semantic_token_types().unwrap();
+            let token_types = kcl_lib::token::TokenType::all_semantic_token_types().unwrap();
 
             let (service, socket) = LspService::new(|client| kcl_lib::server::Backend {
                 client,
