@@ -2,7 +2,7 @@
 name = "kcl-language-server"
 description = "A language server for KCL."
 authors = ["KittyCAD Inc <kcl@kittycad.io>"]
-version = "0.1.14"
+version = "0.1.15"
 edition = "2021"
 license = "MIT"
 
@@ -16,7 +16,7 @@ path = "src/main.rs"
 anyhow = "1.0.75"
 clap = { version = "4.4.4", features = ["cargo", "derive", "env", "unicode"] }
 dashmap = "5.5.3"
-kcl-lib = { version = "0.1.34", default-features = false, features = ["cli"] }
+kcl-lib = { version = "0.1.35", default-features = false, features = ["cli"] }
 #kcl-lib = { path = "../modeling-app/src/wasm-lib/kcl", default-features = false, features = ["cli"] }
 lazy_static = "1.4.0"
 log = { version = "0.4.20", features = ["serde"] }
