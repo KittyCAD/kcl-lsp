@@ -166,7 +166,7 @@ async fn run_cmd(opts: &Opts) -> Result<()> {
                 let mut signals = Signals::new([SIGINT, SIGTERM])?;
 
                 tokio::spawn(async move {
-                    for sig in signals.forever() {
+                    if let Some(sig) = signals.forever().next() {
                         log::info!("received signal: {:?}", sig);
                         log::info!("triggering cleanup...");
 
