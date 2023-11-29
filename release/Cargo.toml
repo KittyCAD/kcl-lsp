@@ -16,7 +16,7 @@ slog = "2.7.0"
 slog-async = "2.8.0"
 slog-json = "2.6.1"
 slog-term = "2.9.0"
-tracing-subscriber = { version = "0.3.17", features = ["registry", "std", "fmt", "smallvec", "ansi", "tracing-log", "json"] }
+tracing-subscriber = { version = "0.3.18", features = ["registry", "std", "fmt", "smallvec", "ansi", "tracing-log", "json"] }
 time = "0.3.30"
 xshell = "0.2.5"
 zip = "0.6.6"
