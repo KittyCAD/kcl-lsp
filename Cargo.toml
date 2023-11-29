@@ -24,7 +24,7 @@ slog = "2.7.0"
 slog-async = "2.8.0"
 slog-json = "2.6.1"
 slog-term = "2.9.0"
-tracing-subscriber = { version = "0.3.17", features = ["registry", "std", "fmt", "smallvec", "ansi", "tracing-log", "json"] }
+tracing-subscriber = { version = "0.3.18", features = ["registry", "std", "fmt", "smallvec", "ansi", "tracing-log", "json"] }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 signal-hook = "0.3.17"
