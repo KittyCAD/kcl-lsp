@@ -145,7 +145,7 @@ jobs:
         run: npx vsce package -o ./build/kcl-language-server-no-server.vsix --pre-release
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-${{ matrix.target }}
           path: ./build
@@ -187,7 +187,7 @@ jobs:
       - run: rm -rf server
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-x86_64-unknown-linux-musl
           path: ./build
