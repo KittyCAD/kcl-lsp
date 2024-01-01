@@ -13,7 +13,7 @@ name = "kcl-language-server"
 path = "src/main.rs"
 
 [dependencies]
-anyhow = "1.0.75"
+anyhow = "1.0.78"
 clap = { version = "4.4.11", features = ["cargo", "derive", "env", "unicode"] }
 dashmap = "5.5.3"
 kcl-lib = { version = "0.1.40", default-features = false, features = ["cli"] }
