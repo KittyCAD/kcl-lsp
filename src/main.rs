@@ -71,7 +71,7 @@ impl Opts {
 #[derive(Parser, Debug, Clone)]
 pub enum SubCommand {
     /// Run the server.
-    Server(kcl_lib::server::Server),
+    Server(kcl_lib::lsp::kcl::Server),
 }
 
 #[tokio::main]
@@ -133,17 +133,19 @@ async fn run_cmd(opts: &Opts) -> Result<()> {
     match &opts.subcmd {
         SubCommand::Server(s) => {
             let stdlib = kcl_lib::std::StdLib::new();
-            let stdlib_completions = kcl_lib::server::get_completions_from_stdlib(&stdlib)?;
-            let stdlib_signatures = kcl_lib::server::get_signatures_from_stdlib(&stdlib)?;
+            let stdlib_completions = kcl_lib::lsp::kcl::get_completions_from_stdlib(&stdlib)?;
+            let stdlib_signatures = kcl_lib::lsp::kcl::get_signatures_from_stdlib(&stdlib)?;
+            let fs = kcl_lib::fs::FileManager::new();
             // We can unwrap here because we know the tokeniser is valid, since
             // we have a test for it.
             let token_types = kcl_lib::token::TokenType::all_semantic_token_types().unwrap();
 
-            let (service, socket) = LspService::new(|client| kcl_lib::server::Backend {
+            let (service, socket) = LspService::new(|client| kcl_lib::lsp::kcl::Backend {
                 client,
                 stdlib_completions,
                 stdlib_signatures,
                 token_types,
+                fs,
                 token_map: Default::default(),
                 ast_map: Default::default(),
                 current_code_map: Default::default(),
