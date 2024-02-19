@@ -42,6 +42,6 @@ FROM app-base
 
 ARG BUILD_MODE=debug
 
-COPY --from=cargo-build /usr/src/kcl-lsp/target/${BUILD_MODE}/kcl-lsp /usr/bin/kcl-lsp
+COPY --from=cargo-build /usr/src/kcl-lsp/target/${BUILD_MODE}/kcl-language-server /usr/bin/kcl-language-server
 
-CMD ["kcl-lsp", "--json", "server"]
+CMD ["kcl-language-server"]
