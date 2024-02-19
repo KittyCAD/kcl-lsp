@@ -20,5 +20,5 @@ tracing-subscriber = { version = "0.3.18", features = ["registry", "std", "fmt",
 time = "0.3.30"
 xshell = "0.2.5"
 zip = "0.6.6"
-tokio = { version = "1.35.0", features = ["full"] }
+tokio = { version = "1.36.0", features = ["full"] }
 lazy_static = "1.4.0"
