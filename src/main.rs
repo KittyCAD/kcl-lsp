@@ -154,7 +154,7 @@ async fn run_cmd(opts: &Opts) -> Result<()> {
                 semantic_tokens_map: Default::default(),
                 workspace_folders: Default::default(),
                 can_send_telemetry: false,
-                zoo_client: kittycad::Client::new_from_env(),
+                zoo_client: kittycad::Client::new(""),
             });
 
             // TODO find a way to ctrl+c on windows.
