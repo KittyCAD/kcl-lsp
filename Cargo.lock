@@ -7,6 +7,10 @@ name = "Inflector"
 version = "0.11.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fe438c63458706e03479442743baae6c88256498e6431708f6dfc520a26515d3"
+dependencies = [
+ "lazy_static",
+ "regex",
+]
 
 [[package]]
 name = "addr2line"
@@ -369,14 +373,16 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "chrono"
-version = "0.4.34"
+version = "0.4.35"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5bc015644b92d5890fab7489e49d21f879d5c990186827d42ec511919404f38b"
+checksum = "8eaf5903dcbc0a39312feb77df2ff4c76387d591b9fc7b04a238dcf8bb62639a"
 dependencies = [
  "android-tzdata",
  "iana-time-zone",
+ "js-sys",
  "num-traits",
  "serde",
+ "wasm-bindgen",
  "windows-targets 0.52.0",
 ]
 
@@ -575,10 +581,11 @@ dependencies = [
 
 [[package]]
 name = "derive-docs"
-version = "0.1.10"
+version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1fc85a0d10f808387cd56147b520be7efd94b8b198b1453f987b133cd2a90b7e"
+checksum = "b4e18a04fe569a325dd50743821f2605057ff5c4b48e60512270b4406907825b"
 dependencies = [
+ "Inflector",
  "convert_case",
  "once_cell",
  "proc-macro2",
@@ -1137,15 +1144,16 @@ dependencies = [
 
 [[package]]
 name = "kcl-lib"
-version = "0.1.45"
+version = "0.1.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "564f299f89b0043563e8c1a7e665e994901531a34a5b11994a9eaa2b723197d3"
+checksum = "c0c5ff8405954a980b36686f049d577316dbbbb7b845582bb41a1af0f2df6fbe"
 dependencies = [
  "anyhow",
  "approx",
  "async-recursion",
  "async-trait",
  "bson",
+ "chrono",
  "clap",
  "dashmap",
  "databake",
@@ -1157,12 +1165,14 @@ dependencies = [
  "kittycad-execution-plan-macros",
  "kittycad-execution-plan-traits",
  "lazy_static",
+ "mime_guess",
  "parse-display 0.9.0",
  "reqwest",
  "ropey",
  "schemars",
  "serde",
  "serde_json",
+ "sha2",
  "thiserror",
  "tokio",
  "tokio-tungstenite",
@@ -1173,6 +1183,7 @@ dependencies = [
  "wasm-bindgen-futures",
  "web-sys",
  "winnow",
+ "zip",
 ]
 
 [[package]]
@@ -1848,9 +1859,9 @@ dependencies = [
 
 [[package]]
 name = "reqwest"
-version = "0.11.24"
+version = "0.11.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c6920094eb85afde5e4a138be3f2de8bbdf28000f0029e72c45025a56b042251"
+checksum = "78bf93c4af7a8bb7d879d51cebe797356ff10ae8516ace542b5182d9dcac10b2"
 dependencies = [
  "base64 0.21.7",
  "bytes",
