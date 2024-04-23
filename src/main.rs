@@ -2,6 +2,8 @@
 
 #![deny(missing_docs)]
 
+use std::sync::Arc;
+
 use anyhow::{bail, Result};
 use clap::Parser;
 use slog::Drain;
@@ -135,7 +137,7 @@ async fn run_cmd(opts: &Opts) -> Result<()> {
             let stdlib = kcl_lib::std::StdLib::new();
             let stdlib_completions = kcl_lib::lsp::kcl::get_completions_from_stdlib(&stdlib)?;
             let stdlib_signatures = kcl_lib::lsp::kcl::get_signatures_from_stdlib(&stdlib)?;
-            let fs = kcl_lib::fs::FileManager::new();
+            let fs = Arc::new(kcl_lib::fs::FileManager::new());
             // We can unwrap here because we know the tokeniser is valid, since
             // we have a test for it.
             let token_types = kcl_lib::token::TokenType::all_semantic_token_types().unwrap();
@@ -148,13 +150,18 @@ async fn run_cmd(opts: &Opts) -> Result<()> {
                 fs,
                 token_map: Default::default(),
                 ast_map: Default::default(),
-                current_code_map: Default::default(),
+                code_map: Default::default(),
+                memory_map: Default::default(),
                 diagnostics_map: Default::default(),
                 symbols_map: Default::default(),
                 semantic_tokens_map: Default::default(),
                 workspace_folders: Default::default(),
                 can_send_telemetry: false,
                 zoo_client: kittycad::Client::new(""),
+                current_handle: Default::default(),
+                can_execute: Default::default(),
+                executor_ctx: Default::default(),
+                is_initialized: Default::default(),
             });
 
             // TODO find a way to ctrl+c on windows.
