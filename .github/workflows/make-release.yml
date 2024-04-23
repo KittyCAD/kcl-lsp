@@ -200,7 +200,7 @@ jobs:
       - name: Install Nodejs
         uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 18
 
       - run: echo "TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
         if: startsWith(github.event.ref, 'refs/tags/v')
