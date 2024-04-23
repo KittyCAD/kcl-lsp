@@ -1135,7 +1135,7 @@ dependencies = [
  "clap",
  "dashmap",
  "kcl-lib",
- "kittycad",
+ "kittycad 0.3.0",
  "lazy_static",
  "log",
  "signal-hook",
@@ -1167,7 +1167,7 @@ dependencies = [
  "futures",
  "gltf-json",
  "js-sys",
- "kittycad",
+ "kittycad 0.2.69",
  "kittycad-execution-plan-macros",
  "kittycad-execution-plan-traits",
  "lazy_static",
@@ -1194,9 +1194,43 @@ dependencies = [
 
 [[package]]
 name = "kittycad"
-version = "0.2.60"
+version = "0.2.69"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f8aa5906d0730bd90f6b3331fe57c04951d00743169a29ee96408767b4060605"
+checksum = "f14a17cc3c056804ad287f698ba54e569e0133b8e728fb18ec73e23a8bdad951"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "base64 0.21.7",
+ "bigdecimal",
+ "bytes",
+ "chrono",
+ "data-encoding",
+ "format_serde_error",
+ "futures",
+ "http 0.2.11",
+ "itertools 0.10.5",
+ "log",
+ "mime_guess",
+ "parse-display 0.8.2",
+ "phonenumber",
+ "rand",
+ "reqwest",
+ "schemars",
+ "serde",
+ "serde_bytes",
+ "serde_json",
+ "serde_urlencoded",
+ "thiserror",
+ "tracing",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "kittycad"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ddc922f0da3abc22661bf49423c9bfcc02ce6ae92dae007ede6990874789545b"
 dependencies = [
  "anyhow",
  "async-trait",
