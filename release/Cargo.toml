@@ -10,7 +10,7 @@ publish = false
 [dependencies]
 anyhow = "1.0.82"
 clap = { version = "4.5.4", features = ["cargo", "derive", "env", "unicode"] }
-flate2 = "1.0.29"
+flate2 = "1.0.30"
 log = { version = "0.4.21", features = ["serde"] }
 slog = "2.7.0"
 slog-async = "2.8.0"
