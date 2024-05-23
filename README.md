@@ -1,9 +1,11 @@
 # kcl-lsp
 
 The `kcl` [Language Server Protocol](https://microsoft.github.io/language-server-protocol)
-implementation.
+implementation and VSCode extension.
 
-This is just the server process. Most of the actual code for the server endpoints is in the same repo as the AST/tokenizer/parser since it's all relevant. That is [modeling-app](https://github.com/kittycad/modeling-app).
+This language server is a thin wrapper around the KCL language tooling library.
+That is found in the [modeling-app](https://github.com/kittycad/modeling-app) repo, and published as
+on crates.io as [kcl-lib](https://crates.io/crates/kcl-lib).
 
 ## VSCode
 
@@ -85,7 +87,11 @@ args = ["server", "--stdio"]
 ```bash
 $ yarn install
 $ cargo build
+$ code .
 ```
+
+Once VSCode opens, go to the "Run and Debug" panel (cmd-shift-D on MacOS), and choose Run Extension (Debug Build).
+This opens a new VSCode window with our KCL extension installed. Open a KCL file and check that the LSP is working.
 
 - press <kbd>F5</kbd> or change to the Debug panel and click <kbd>Launch Client</kbd>
 
