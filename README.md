@@ -57,6 +57,29 @@ else
 end
 ```
 
+## Helix
+
+Add this to your `languages.toml` file. Remember to change ``/Users/adamchalmers` to your path.
+
+Note that we don't currently have Treesitter parsers, so there won't be syntax highlighting.
+
+```toml
+[[language]]
+name = "kcl"
+scope = "source.kcl"
+injection-regex = "kcl"
+file-types = ["kcl"]
+comment-tokens = "//"
+indent = { tab-width = 2, unit = "  " }
+language-servers = [ "kcl-lsp" ]
+block-comment-tokens = { start = "/*", end = "*/"}
+
+
+[language-server.kcl-lsp]
+command = "/Users/adamchalmers/kc-repos/kcl-lsp/target/release/kcl-language-server"
+args = ["server", "--stdio"]
+```
+
 ## Development
 
 ```bash
