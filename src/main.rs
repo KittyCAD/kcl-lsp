@@ -170,7 +170,7 @@ async fn run_cmd(opts: &Opts) -> Result<()> {
                 // For Cloud run & ctrl+c, shutdown gracefully.
                 // "The main process inside the container will receive SIGTERM, and after a grace period,
                 // SIGKILL."
-                // Regsitering SIGKILL here will panic at runtime, so let's avoid that.
+                // Registering SIGKILL here will panic at runtime, so let's avoid that.
                 use signal_hook::{
                     consts::{SIGINT, SIGTERM},
                     iterator::Signals,

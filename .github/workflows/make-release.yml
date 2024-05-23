@@ -25,7 +25,8 @@ jobs:
         include:
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            code-target: win32-x64
+            code-target:
+              win32-x64
               #- os: windows-latest
               #target: i686-pc-windows-msvc
               #code-target:
@@ -245,7 +246,8 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: release-x86_64-pc-windows-msvc
-          path: build
+          path:
+            build
             #- uses: actions/download-artifact@v4
             #with:
             #name: release-i686-pc-windows-msvc
