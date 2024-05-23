@@ -62,7 +62,7 @@ function createCommands(): Record<string, CommandFactory> {
     },
     stopServer: {
       enabled: (ctx) => async () => {
-        // FIXME: We should re-use the client, that is ctx.deactivate() if none of the configs have changed
+        // FIXME: We should reuse the client, that is ctx.deactivate() if none of the configs have changed
         await ctx.stopAndDispose();
         ctx.setServerStatus({
           health: "stopped",

@@ -190,7 +190,7 @@ export class Ctx {
   }
 
   async restart() {
-    // FIXME: We should re-use the client, that is ctx.deactivate() if none of the configs have changed
+    // FIXME: We should reuse the client, that is ctx.deactivate() if none of the configs have changed
     await this.stopAndDispose();
     await this.start();
   }
