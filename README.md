@@ -59,7 +59,7 @@ end
 
 ## Helix
 
-Add this to your `languages.toml` file. Remember to change ``/Users/adamchalmers` to your path.
+Add this to your `languages.toml` file. Remember to change `/Users/adamchalmers` to your path.
 
 Note that we don't currently have Treesitter parsers, so there won't be syntax highlighting.
 
