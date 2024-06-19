@@ -15,7 +15,7 @@ path = "src/main.rs"
 [dependencies]
 anyhow = "1.0.86"
 clap = { version = "4.5.7", features = ["cargo", "derive", "env", "unicode"] }
-dashmap = "5.5.3"
+dashmap = "6.0.0"
 kcl-lib = {git = "https://github.com/kittycad/modeling-app", branch = "main", features = ["cli", "engine"]}
 #kcl-lib = { version = "0.1.57", default-features = false, features = ["cli", "engine"] }
 #kcl-lib = { path = "../modeling-app/src/wasm-lib/kcl", default-features = false, features = ["cli", "engine"] }
