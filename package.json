@@ -25,7 +25,7 @@
     "type": "git"
   },
   "engines": {
-    "vscode": "^1.66.0"
+    "vscode": "^1.90.0"
   },
   "enabledApiProposals": [],
   "activationEvents": [
@@ -154,6 +154,6 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "vscode-languageclient": "^8.1.0"
+    "vscode-languageclient": "^9.0.1"
   }
 }

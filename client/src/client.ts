@@ -69,4 +69,5 @@ class ExperimentalFeatures implements lc.StaticFeature {
     _documentSelector: lc.DocumentSelector | undefined,
   ): void {}
   dispose(): void {}
+  clear(): void {}
 }
