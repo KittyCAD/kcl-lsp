@@ -65,4 +65,3 @@ const part001 = startSketchAt([0.0000000000, 5.0000000000])
     |> close(%)
     |> extrude(1, %)"things"
 
-show(part001)
