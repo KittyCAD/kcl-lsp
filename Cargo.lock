@@ -1229,7 +1229,7 @@ dependencies = [
 
 [[package]]
 name = "kcl-language-server"
-version = "0.1.32"
+version = "0.1.33"
 dependencies = [
  "anyhow",
  "clap",
@@ -1250,9 +1250,9 @@ dependencies = [
 
 [[package]]
 name = "kcl-lib"
-version = "0.1.60"
+version = "0.1.61"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3e4eef8afdcc73b4a4d932953592caed96acb3851e5e56c969172e7d6d00d8bc"
+checksum = "6bf7347b61f48ff877218feea5e13362f7849fdb7d96caabe7d69c17f0a0b20c"
 dependencies = [
  "anyhow",
  "approx",
@@ -3017,6 +3017,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5e2dcf58e612adda9a83800731e8e4aba04d8a302b9029617b0b6e4b021d5357"
 dependencies = [
  "chrono",
+ "serde_json",
  "thiserror",
  "ts-rs-macros",
  "url",
