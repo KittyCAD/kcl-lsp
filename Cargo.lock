@@ -190,12 +190,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "atomic"
-version = "0.5.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c59bdb34bc650a32731b31bd8f0829cc15d24a708ee31559e0bb34f2bc320cba"
-
-[[package]]
 name = "auto_impl"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1229,7 +1223,7 @@ dependencies = [
 
 [[package]]
 name = "kcl-language-server"
-version = "0.1.38"
+version = "0.1.39"
 dependencies = [
  "anyhow",
  "clap",
@@ -1250,9 +1244,9 @@ dependencies = [
 
 [[package]]
 name = "kcl-lib"
-version = "0.1.65"
+version = "0.1.67"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ace7f81b9ef4abcfe8b1ee7059be772fb70092631d074d31dec6f3f66520e16d"
+checksum = "c3d70e0e7614df8f743ee8c7a3404ed7e6f4d414e30fe289ad252e6c6289fc3e"
 dependencies = [
  "anyhow",
  "approx",
@@ -1262,7 +1256,7 @@ dependencies = [
  "bson",
  "chrono",
  "clap",
- "dashmap 5.5.3",
+ "dashmap 6.0.1",
  "databake",
  "derive-docs",
  "form_urlencoded",
@@ -3136,11 +3130,10 @@ checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
 
 [[package]]
 name = "uuid"
-version = "1.8.0"
+version = "1.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a183cf7feeba97b4dd1c0d46788634f6221d87fa961b305bed08c851829efcc0"
+checksum = "5de17fd2f7da591098415cff336e12965a28061ddace43b59cb3c430179c9439"
 dependencies = [
- "atomic",
  "getrandom",
  "serde",
  "wasm-bindgen",
