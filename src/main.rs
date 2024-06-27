@@ -138,15 +138,11 @@ async fn run_cmd(opts: &Opts) -> Result<()> {
             let stdlib_completions = kcl_lib::lsp::kcl::get_completions_from_stdlib(&stdlib)?;
             let stdlib_signatures = kcl_lib::lsp::kcl::get_signatures_from_stdlib(&stdlib)?;
             let fs = Arc::new(kcl_lib::fs::FileManager::new());
-            // We can unwrap here because we know the tokeniser is valid, since
-            // we have a test for it.
-            let token_types = kcl_lib::token::TokenType::all_semantic_token_types().unwrap();
 
             let (service, socket) = LspService::new(|client| kcl_lib::lsp::kcl::Backend {
                 client,
                 stdlib_completions,
                 stdlib_signatures,
-                token_types,
                 fs,
                 token_map: Default::default(),
                 ast_map: Default::default(),
@@ -158,7 +154,6 @@ async fn run_cmd(opts: &Opts) -> Result<()> {
                 workspace_folders: Default::default(),
                 can_send_telemetry: false,
                 zoo_client: kittycad::Client::new(""),
-                current_handle: Default::default(),
                 can_execute: Default::default(),
                 executor_ctx: Default::default(),
                 is_initialized: Default::default(),
