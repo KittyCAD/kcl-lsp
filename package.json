@@ -25,7 +25,7 @@
     "type": "git"
   },
   "engines": {
-    "vscode": "^1.90.0"
+    "vscode": "^1.91.0"
   },
   "enabledApiProposals": [],
   "activationEvents": [
