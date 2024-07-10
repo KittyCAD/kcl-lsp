@@ -18,7 +18,7 @@ clap = { version = "4.5.9", features = ["cargo", "derive", "env", "unicode"] }
 dashmap = "6.0.1"
 kcl-lib = { version = "0.1.70", default-features = false, features = ["cli", "engine", "disable-println"] }
 #kcl-lib = { path = "../modeling-app/src/wasm-lib/kcl", default-features = false, features = ["cli", "engine", "disable-println"] }
-kittycad = "0.3.7"
+kittycad = "0.3.8"
 lazy_static = "1.5.0"
 log = { version = "0.4.22", features = ["serde"] }
 slog = "2.7.0"
