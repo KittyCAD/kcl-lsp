@@ -9,7 +9,7 @@ publish = false
 
 [dependencies]
 anyhow = "1.0.86"
-clap = { version = "4.5.10", features = ["cargo", "derive", "env", "unicode"] }
+clap = { version = "4.5.11", features = ["cargo", "derive", "env", "unicode"] }
 flate2 = "1.0.30"
 log = { version = "0.4.22", features = ["serde"] }
 slog = "2.7.0"
