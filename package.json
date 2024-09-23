@@ -145,7 +145,7 @@
     "@vscode/test-electron": "^2.4.1",
     "@vscode/vsce": "^2.30.0",
     "cross-env": "^7.0.3",
-    "esbuild": "^0.23.1",
+    "esbuild": "^0.24.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.0.0",
     "glob": "^10.4.3",
