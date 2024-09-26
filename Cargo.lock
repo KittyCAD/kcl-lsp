@@ -677,9 +677,9 @@ dependencies = [
 
 [[package]]
 name = "derive-docs"
-version = "0.1.27"
+version = "0.1.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f01937b7b4c59463ee93c31ad1afcedfdd13783f3ee2f72cce5549f8fba790e"
+checksum = "8a5e37d2f5950031d3843acaa715b4985a6e07d56b38dab1cf49431383f51712"
 dependencies = [
  "Inflector",
  "convert_case",
@@ -1317,7 +1317,7 @@ dependencies = [
 
 [[package]]
 name = "kcl-language-server"
-version = "0.1.56"
+version = "0.1.57"
 dependencies = [
  "anyhow",
  "clap",
@@ -1338,9 +1338,9 @@ dependencies = [
 
 [[package]]
 name = "kcl-lib"
-version = "0.2.18"
+version = "0.2.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3c4791760fdbf19d4b549233c0df2f945d80ec5cb97da88010c670fae656e0f4"
+checksum = "a43fbf45aaacece023c9dc5c1dd6238ac1f6f64bbd5d5fdddf61a2f63d847427"
 dependencies = [
  "anyhow",
  "approx 0.5.1",
@@ -1432,9 +1432,9 @@ dependencies = [
 
 [[package]]
 name = "kittycad-modeling-cmds"
-version = "0.2.61"
+version = "0.2.64"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5128ba683e849388cac4214b65911c343842d559bec10827575c840a47733786"
+checksum = "0a888b32ba73a4e381e5c41d89a852fd64b97b9e6cdc8bc53444416f74b44ecc"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1457,9 +1457,21 @@ dependencies = [
 
 [[package]]
 name = "kittycad-modeling-cmds-macros"
-version = "0.1.9"
+version = "0.1.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0cdc505a33bfffb87c317435ec41ced8f73474217cf30db685e479bf289757e"
+checksum = "fb9bb1a594541b878adc1c8dcb821328774bf7aa09b65b104a206b1291a5235c"
+dependencies = [
+ "kittycad-modeling-cmds-macros-impl",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.77",
+]
+
+[[package]]
+name = "kittycad-modeling-cmds-macros-impl"
+version = "0.1.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0d6d5c7c50c7f4bbc0d56dad46e064b256a321912f154ffb3fcb78888adf3f67"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2003,9 +2015,9 @@ dependencies = [
 
 [[package]]
 name = "quote"
-version = "1.0.36"
+version = "1.0.37"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0fa76aaf39101c457836aec0ce2316dbdc3ab723cdda1c6bd4e6ad4208acaca7"
+checksum = "b5b9d34b8991d19d98081b46eacdd8eb58c6f2b201139f7c5f643cc155a633af"
 dependencies = [
  "proc-macro2",
 ]
@@ -2911,18 +2923,18 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "1.0.63"
+version = "1.0.64"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c0342370b38b6a11b6cc11d6a805569958d54cfa061a29969c3b5ce2ea405724"
+checksum = "d50af8abc119fb8bb6dbabcfa89656f46f84aa0ac7688088608076ad2b459a84"
 dependencies = [
  "thiserror-impl",
 ]
 
 [[package]]
 name = "thiserror-impl"
-version = "1.0.63"
+version = "1.0.64"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4558b58466b9ad7ca0f102865eccc95938dca1a74a856f2b57b6629050da261"
+checksum = "08904e7672f5eb876eaaf87e0ce17857500934f4981c4a0ab2b4aa98baac7fc3"
 dependencies = [
  "proc-macro2",
  "quote",
