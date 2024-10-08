@@ -137,7 +137,7 @@
   "devDependencies": {
     "@tsconfig/strictest": "^2.0.5",
     "@types/glob": "^8.1.0",
-    "@types/mocha": "^10.0.8",
+    "@types/mocha": "^10.0.9",
     "@types/node": "^22.7.4",
     "@types/vscode": "^1.92.0",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
