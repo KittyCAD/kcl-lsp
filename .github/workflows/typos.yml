@@ -26,9 +26,9 @@ jobs:
         uses: astral-sh/setup-uv@v3
       - name: Install codespell
         run: |
-            uv venv .venv
-            echo "VIRTUAL_ENV=.venv" >> $GITHUB_ENV
-            echo "$PWD/.venv/bin" >> $GITHUB_PATH
-            uv pip install codespell
+          uv venv .venv
+          echo "VIRTUAL_ENV=.venv" >> $GITHUB_ENV
+          echo "$PWD/.venv/bin" >> $GITHUB_PATH
+          uv pip install codespell
       - name: Run codespell
         run: codespell --config .codespellrc # Edit this file to tweak the typo list and other configuration.
