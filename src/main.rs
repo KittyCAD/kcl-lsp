@@ -2,8 +2,6 @@
 
 #![deny(missing_docs)]
 
-use std::sync::Arc;
-
 use anyhow::{bail, Result};
 use clap::Parser;
 use slog::Drain;
@@ -73,7 +71,7 @@ impl Opts {
 #[derive(Parser, Debug, Clone)]
 pub enum SubCommand {
     /// Run the server.
-    Server(kcl_lib::lsp::kcl::Server),
+    Server(kcl_lib::KclLspServerSubCommand),
 }
 
 #[tokio::main]
@@ -134,29 +132,8 @@ async fn main() -> Result<()> {
 async fn run_cmd(opts: &Opts) -> Result<()> {
     match &opts.subcmd {
         SubCommand::Server(s) => {
-            let stdlib = kcl_lib::std::StdLib::new();
-            let stdlib_completions = kcl_lib::lsp::kcl::get_completions_from_stdlib(&stdlib)?;
-            let stdlib_signatures = kcl_lib::lsp::kcl::get_signatures_from_stdlib(&stdlib)?;
-            let fs = Arc::new(kcl_lib::fs::FileManager::new());
-
-            let (service, socket) = LspService::new(|client| kcl_lib::lsp::kcl::Backend {
-                client,
-                stdlib_completions,
-                stdlib_signatures,
-                fs,
-                token_map: Default::default(),
-                ast_map: Default::default(),
-                code_map: Default::default(),
-                memory_map: Default::default(),
-                diagnostics_map: Default::default(),
-                symbols_map: Default::default(),
-                semantic_tokens_map: Default::default(),
-                workspace_folders: Default::default(),
-                can_send_telemetry: false,
-                zoo_client: kittycad::Client::new(""),
-                can_execute: Default::default(),
-                executor_ctx: Default::default(),
-                is_initialized: Default::default(),
+            let (service, socket) = LspService::new(|client| {
+                kcl_lib::KclLspBackend::new(client, Default::default(), kittycad::Client::new(""), false).unwrap()
             });
 
             // TODO find a way to ctrl+c on windows.
