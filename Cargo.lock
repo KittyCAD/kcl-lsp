@@ -464,7 +464,7 @@ dependencies = [
  "clap_lex",
  "strsim",
  "unicase",
- "unicode-width",
+ "unicode-width 0.2.0",
 ]
 
 [[package]]
@@ -1491,9 +1491,9 @@ dependencies = [
 
 [[package]]
 name = "kcl-lib"
-version = "0.2.26"
+version = "0.2.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f2d1dfc33302d0b95433befd718bbeba79267a19fff09844193fa83e22c642d5"
+checksum = "8c2a9890dce94652351c4f6b3492dd79f2de0a6ed3188103d3551cce16409204"
 dependencies = [
  "anyhow",
  "approx 0.5.1",
@@ -1520,6 +1520,7 @@ dependencies = [
  "kittycad-modeling-cmds",
  "lazy_static",
  "measurements",
+ "miette",
  "mime_guess",
  "parse-display 0.9.1",
  "reqwest",
@@ -1541,6 +1542,7 @@ dependencies = [
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "web-sys",
+ "web-time",
  "winnow",
  "zip 2.2.1",
 ]
@@ -1745,6 +1747,29 @@ name = "memchr"
 version = "2.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
+
+[[package]]
+name = "miette"
+version = "7.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "317f146e2eb7021892722af37cf1b971f0a70c8406f487e24952667616192c64"
+dependencies = [
+ "cfg-if",
+ "miette-derive",
+ "thiserror 1.0.69",
+ "unicode-width 0.1.14",
+]
+
+[[package]]
+name = "miette-derive"
+version = "7.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "23c9b935fbe1d6cbd1dac857b54a688145e2d93f48db36010514d0f612d0ad67"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.89",
+]
 
 [[package]]
 name = "mime"
@@ -3526,6 +3551,12 @@ name = "unicode-segmentation"
 version = "1.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f6ccf251212114b54433ec949fd6a7841275f9ada20dddd2f29e9ceea4501493"
+
+[[package]]
+name = "unicode-width"
+version = "0.1.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7dd6e30e90baa6f72411720665d41d89b9a3d039dc45b8faea1ddd07f617f6af"
 
 [[package]]
 name = "unicode-width"
