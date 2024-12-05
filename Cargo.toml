@@ -22,7 +22,7 @@ kcl-lib = { version = "0.2.27", default-features = false, features = [
 	"disable-println",
 ] }
 #kcl-lib = { path = "../modeling-app/src/wasm-lib/kcl", default-features = false, features = ["cli", "engine", "disable-println"] }
-kittycad = "0.3.26"
+kittycad = "0.3.28"
 lazy_static = "1.5.0"
 log = { version = "0.4.22", features = ["serde"] }
 slog = "2.7.0"
