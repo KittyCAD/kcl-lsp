@@ -677,9 +677,9 @@ dependencies = [
 
 [[package]]
 name = "derive-docs"
-version = "0.1.31"
+version = "0.1.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f26afe8c7a6902add6133e3b2d747c9be9cd9efcf8811b76e5bd6bab7a0ba4c0"
+checksum = "d9182044782933165c4df847039e6c69cf3ee0ad513d4569907df23f3dc3dd65"
 dependencies = [
  "Inflector",
  "convert_case",
@@ -1491,9 +1491,9 @@ dependencies = [
 
 [[package]]
 name = "kcl-lib"
-version = "0.2.27"
+version = "0.2.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8c2a9890dce94652351c4f6b3492dd79f2de0a6ed3188103d3551cce16409204"
+checksum = "e7135736e04a708b5004b19eda300f90884b7b1aeeebc24e09f2ab19fa45e790"
 dependencies = [
  "anyhow",
  "approx 0.5.1",
