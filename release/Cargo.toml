@@ -19,6 +19,6 @@ slog-term = "2.9.1"
 tracing-subscriber = { version = "0.3.19", features = ["registry", "std", "fmt", "smallvec", "ansi", "tracing-log", "json"] }
 time = "0.3.37"
 xshell = "0.2.6"
-zip = "0.6.6"
+zip = "2.2.1"
 tokio = { version = "1.42.0", features = ["full"] }
 lazy_static = "1.5.0"
