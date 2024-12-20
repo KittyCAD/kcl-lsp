@@ -150,7 +150,7 @@
     "eslint-config-prettier": "^9.0.0",
     "glob": "^10.4.3",
     "mocha": "^11.0.1",
-    "prettier": "^3.4.1",
+    "prettier": "^3.4.2",
     "typescript": "^5.7.2"
   },
   "dependencies": {
