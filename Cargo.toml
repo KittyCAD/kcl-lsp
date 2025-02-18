@@ -16,7 +16,7 @@ path = "src/main.rs"
 anyhow = "1.0.95"
 clap = { version = "4.5.30", features = ["cargo", "derive", "env", "unicode"] }
 dashmap = "6.1.0"
-kcl-lib = { version = "0.2.33", default-features = false, features = [
+kcl-lib = { version = "0.2.35", default-features = false, features = [
 	"cli",
 	"engine",
 	"disable-println",
