@@ -1434,7 +1434,7 @@ dependencies = [
 
 [[package]]
 name = "kcl-language-server"
-version = "0.1.68"
+version = "0.1.69"
 dependencies = [
  "anyhow",
  "clap",
