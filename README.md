@@ -1,5 +1,8 @@
 # kcl-lsp
 
+**This has been moved to [KittyCAD/modeling-app/rust/kcl-language-server](https://github.com/KittyCAD/modeling-app/tree/main/rust/kcl-language-server)**
+
+
 The `kcl` [Language Server Protocol](https://microsoft.github.io/language-server-protocol)
 implementation and VSCode extension.
 
